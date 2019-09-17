@@ -12,7 +12,8 @@ pychromatic
         :alt: Documentation Status
 
 .. image:: https://travis-ci.com/srmnitc/pychromatic.svg?token=YHSadJsCHYKmVDyUgtqh&branch=master
-    :target: https://travis-ci.com/srmnitc/pychromatic
+        :target: https://travis-ci.com/srmnitc/pychromatic
+        :alt: Build status
 
  a pretty color selector for python
 
