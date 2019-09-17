@@ -1,7 +1,5 @@
 
-from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 import matplotlib.pyplot as plt
-import matplotlib.colors as mcolors
 import matplotlib.colors as mcolors
 import matplotlib.gridspec as gridspec
 from matplotlib.ticker import (MultipleLocator, FormatStrFormatter, AutoMinorLocator)
