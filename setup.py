@@ -11,8 +11,6 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = [ 'matplotlib', ]
-
 setup_requirements = ['pytest-runner', ]
 
 test_requirements = ['pytest>=3', ]
@@ -34,7 +32,7 @@ setup(
         'Programming Language :: Python :: 3.7',
     ],
     description="a pretty color selector for python",
-    install_requires=requirements,
+    install_requires=['matplotlib'],
     license="GNU General Public License v3",
     long_description=readme + '\n\n' + history,
     include_package_data=True,
