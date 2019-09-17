@@ -6,21 +6,15 @@ pychromatic
 .. image:: https://img.shields.io/pypi/v/pychromatic.svg
         :target: https://pypi.python.org/pypi/pychromatic
 
-.. image:: https://img.shields.io/travis/srmnitc/pychromatic.svg
-        :target: https://travis-ci.org/srmnitc/pychromatic
 
 .. image:: https://readthedocs.org/projects/pychromatic/badge/?version=latest
         :target: https://pychromatic.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
+.. image:: https://travis-ci.com/srmnitc/pychromatic.svg?token=YHSadJsCHYKmVDyUgtqh&branch=master
+    :target: https://travis-ci.com/srmnitc/pychromatic
 
-.. image:: https://pyup.io/repos/github/srmnitc/pychromatic/shield.svg
-     :target: https://pyup.io/repos/github/srmnitc/pychromatic/
-     :alt: Updates
-
-
-
-a pretty color selector for python
+ a pretty color selector for python
 
 
 * Free software: GNU General Public License v3
