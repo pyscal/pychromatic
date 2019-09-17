@@ -6,19 +6,14 @@ pychromatic
 .. image:: https://img.shields.io/pypi/v/pychromatic.svg
         :target: https://pypi.python.org/pypi/pychromatic
 
-.. image:: https://img.shields.io/travis/srmnitc/pychromatic.svg
-        :target: https://travis-ci.org/srmnitc/pychromatic
 
 .. image:: https://readthedocs.org/projects/pychromatic/badge/?version=latest
         :target: https://pychromatic.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
-
-.. image:: https://pyup.io/repos/github/srmnitc/pychromatic/shield.svg
-     :target: https://pyup.io/repos/github/srmnitc/pychromatic/
-     :alt: Updates
-
-
+.. image:: https://github.com/srmnitc/pychromatic/workflows/build/badge.svg
+     :target: https://github.com/srmnitc/pychromatic/actions
+     :alt: Actions Status
 
 a pretty color selector for python
 
