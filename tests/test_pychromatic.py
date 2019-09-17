@@ -6,7 +6,7 @@
 import pytest
 
 
-from pychromatic import colors
+from pychromatic import palette
 
 
 @pytest.fixture
