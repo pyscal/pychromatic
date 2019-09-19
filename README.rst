@@ -2,19 +2,16 @@
 pychromatic
 ===========
 
-
+.. image:: https://travis-ci.com/srmnitc/pychromatic.svg?branch=master
+        :target: https://travis-ci.com/srmnitc/pychromatic
+    
 .. image:: https://img.shields.io/pypi/v/pychromatic.svg
         :target: https://pypi.python.org/pypi/pychromatic
 
-
 .. image:: https://readthedocs.org/projects/pychromatic/badge/?version=latest
         :target: https://pychromatic.readthedocs.io/en/latest/?badge=latest
-        :alt: Documentation Status
-
-.. image:: https://travis-ci.com/srmnitc/pychromatic.svg?token=YHSadJsCHYKmVDyUgtqh&branch=master
-        :target: https://travis-ci.com/srmnitc/pychromatic
-        :alt: Build status
-
+ 
+ 
  a pretty color selector for python
 
 
