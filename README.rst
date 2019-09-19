@@ -11,10 +11,8 @@ pychromatic
 
 .. image:: https://readthedocs.org/projects/pychromatic/badge/?version=latest
         :target: https://pychromatic.readthedocs.io/en/latest/?badge=latest
-        :alt: Documentation Status
-
-
-
+ 
+ 
  a pretty color selector for python
 
 
