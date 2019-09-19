@@ -4,7 +4,7 @@ import colorsys
 import numpy as np
 import matplotlib.colors as mc
 
-class color_utils:
+class Color_utils:
     """
     A class which holds the utility functions for modifying a class. 
     """
