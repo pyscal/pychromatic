@@ -11,9 +11,8 @@ pychromatic
         :target: https://pychromatic.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
-.. image:: https://travis-ci.com/srmnitc/pychromatic.svg?token=YHSadJsCHYKmVDyUgtqh&branch=master
-        :target: https://travis-ci.com/srmnitc/pychromatic
-        :alt: Build status
+.. image:: https://travis-ci.com/srmnitc/pychromatic.svg?branch=master
+    :target: https://travis-ci.com/srmnitc/pychromatic
 
  a pretty color selector for python
 
