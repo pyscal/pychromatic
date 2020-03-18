@@ -77,8 +77,11 @@ class Palette(Color_utils):
             self.assign_palette(random_plt)
 
 
-    def plot_colors(self):
+    def plot_colors(self, limit=None):
         """
         Wrap around inherited plot function
         """
-        Color_utils.plot_colors(self, self.colors)
+        if limit is None:
+            Color_utils.plot_colors(self, self.colors)
+        else:
+            Color_utils.plot_colors(self, self.colors[:limit+1])
