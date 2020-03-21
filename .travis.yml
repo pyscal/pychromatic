@@ -2,12 +2,17 @@ dist: xenial
 language: python
 jobs:
   include:
-    - python: "3.7"
-    - python: "2.7"
+  - python: '3.7'
+  - python: '2.7'
 install:
-  - pip install -r requirements_dev.txt
-  - pip install -e .
+- pip install -r requirements_dev.txt
+- pip install -e .
 script:
-  - flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-  - flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-  - pytest --cov-report term-missing --cov=pychromatic tests/
+- flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+- flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+- pytest --cov-report term-missing --cov=pychromatic tests/
+deploy:
+  provider: pypi
+  user: __token__
+  password:
+    secure: BnjzTEBJt3dR9NFMycCwTHUD05vJ0kbSBOCTscIxrSbNunF9OJWwRVRldmBpetMbedMnxSAowjtyDd/v6Ei6ts3hDc3jVzO2kf1IegC8nd29uHC2Le5xLKWKlOLnJzOMcdMkV29dYPHJfxtB6Fhg/OQQtY7p/LPX7YBul7ZDoECueI3f3N/kjP9bHFh7IID/ui2VDFzesciWCeBBaq+ISN+E+QxtClJsvEPqjbIBoTu81iZoAaX8uvb5suluYP/WKDkXqYgvQtxLkUDOMdnR5orI1pSNPTQFiUsRKEXjG0zfExRhzFUWcYukfmYYMUlyP5PodrtsjqO2DLN5FgEOaF+2pDWfI9PU0h5MUG4ShYoOUXJxzdx5XPatj+Wd9b/LX7YjqTnRQVju2ZNYKZ4GuZ1CLa6m0B88Gaj/zuK7EO7f8PbjUsqztRKXyQt/PPcGCbRaZnjSVzm/i1UpW2PoPE3hP3FpRk2AzkvVVp8GEdSoLEYpA/v2JIJDXShdbTXI8D+BAJSgi9ZKRj+e8sdgxSclEeFYjuI47gz+7125pERCP68rriSbx+Dafaq/7qW72HVY/9DPsDmXEVbcZxC98O3AnB0eP1vFTjcWRJpWcnsku0GoPKHUBnglUzQgu35IajyIhaAwYpCwNMPoDg7bLI5asTdpnWvGKkJbzcesa4c=
