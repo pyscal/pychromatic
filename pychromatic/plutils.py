@@ -16,7 +16,7 @@ class Multiplot:
         self.width = width
         #plot dimensions
         self.fraction = kwargs.get('fraction',1)
-        self.ration = kwargs.get('ration', ((5**.5 - 1) / 2.0))
+        self.ratio = kwargs.get('ratio', ((5**.5 - 1) / 2.0))
         #palette specs
         self.palette = Palette(palette=kwargs.get('palette', 'default'))
         #number of plots
