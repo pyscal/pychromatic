@@ -6,7 +6,7 @@ import matplotlib.colors as mc
 
 class Color_utils:
     """
-    A class which holds the utility functions for modifying a class. 
+    A class which holds the utility functions for modifying a class.
     """
     def __init__(self):
         self.a = 1
@@ -35,7 +35,7 @@ class Color_utils:
 
         Parameters
         ----------
-        rgb : list 
+        rgb : list
             a list consisting of three rgb values. It can either be from 0 to 255
             or from 0 to 1.
 
@@ -53,7 +53,7 @@ class Color_utils:
             return "#{:02x}{:02x}{:02x}".format(int(rgb[0]),int(rgb[1]),int(rgb[2]))
         else:
             raise ValueError("rgb values should be within 0-255")
-        
+
 
     def rgb_to_hls(self, rgbval):
         """
@@ -106,7 +106,7 @@ class Color_utils:
         ----------
         color : string
             the hex value of input color
-        
+
         fraction : float
             the amount by which to brighten the color
 
@@ -122,10 +122,10 @@ class Color_utils:
         """
         rgbval = self.hex_to_rgb(color)
         hls = self.rgb_to_hls(rgbval)
-        
-        #now adjust luminescence - 
+
+        #now adjust luminescence -
         hls[1] =min((1+fraction)*hls[1], 1)
-        
+
         rgb = colorsys.hls_to_rgb(hls[0], hls[1], hls[2])
         hexv = self.rgb_to_hex(rgb)
         return hexv
@@ -155,13 +155,13 @@ class Color_utils:
         -----
         if `ratio` is `r`, then the new color would be r*color1 + (1-r)*color2
         """
-        
+
         rgb1 = self.hex_to_rgb(color1)
         rgb2 = self.hex_to_rgb(color2)
-        
+
         rgb = [ratio*rgb1[x] + (1-ratio)*rgb2[x] for x in range(3)]
         hexv = self.rgb_to_hex(rgb)
-        
+
         return hexv
 
 
@@ -199,13 +199,13 @@ class Color_utils:
         rpoints = np.linspace(rgb1[0], rgb2[0], colors+2)
         gpoints = np.linspace(rgb1[1], rgb2[1], colors+2)
         bpoints = np.linspace(rgb1[2], rgb2[2], colors+2)
-        
+
         #stack to pairs
         if ignore_edges:
             new_rgbs = np.stack((rpoints[1:-1], gpoints[1:-1], bpoints[1:-1]), axis=-1)
         else:
             new_rgbs = np.stack((rpoints, gpoints, bpoints), axis=-1)
-        
+
         #convert to hexvals
         hexvals = [self.rgb_to_hex(rgb) for rgb in new_rgbs]
         return hexvals
@@ -231,7 +231,7 @@ class Color_utils:
         cmap = mc.LinearSegmentedColormap.from_list("", colors)
         return cmap
 
-    def plot_colors(self, colors):
+    def plot_colors(self, colors, minimal=False):
         """
         Show plot to illustrate the colors
 
@@ -240,19 +240,39 @@ class Color_utils:
         colors : list
             list of colors to plot in hex values
 
+        minimal : bool, optional
+            if True, plot a minimal bar
+            default False
+
         Returns
         -------
         None
-        
-        """
-        fig, axs = plt.subplots(1, 3, figsize=(17, 5))
-        for count, color in enumerate(colors):
-                x = np.arange(11)
-                y = np.sin(x/(1.75*np.pi))
-                axs[0].plot(x, y+count/3., color=color, label="%s"%color, linewidth=4)
-        axs[1].pie((np.random.dirichlet(np.ones(len(colors)),size=1)*100)[0], colors=colors, autopct='%1.1f%%', startangle=90)
-        axs[1].axis('equal')
-        axs[2].bar(np.arange(len(colors)), np.arange(len(colors))+1,color=colors,linewidth=0)
-        axs[2].set_xticks(np.arange(len(colors))+0.4)
-        plt.show()
 
+        """
+        if not minimal:
+            fig, axs = plt.subplots(1, 3, figsize=(12, 5))
+            for count, color in enumerate(colors):
+                    x = np.arange(11)
+                    y = np.sin(x/(1.75*np.pi))
+                    axs[0].plot(x, y+count/3., color=color, label="%s"%color, linewidth=4)
+            axs[1].pie((np.random.dirichlet(np.ones(len(colors)),size=1)*100)[0], colors=colors, autopct='%1.1f%%', startangle=90)
+            axs[1].axis('equal')
+            axs[2].bar(np.arange(len(colors)), np.arange(len(colors))+1,color=colors,linewidth=0)
+            axs[2].set_xticks(np.arange(len(colors))+0.4)
+            plt.show()
+        else:
+            fig = plt.figure(figsize=[len(colors), 1.5])
+            spec = gridspec.GridSpec(ncols=len(colors), nrows=2, figure=fig)
+            for count, color in enumerate(colors):
+                ax1 = fig.add_subplot(spec[0, count])
+                ax1.fill([0,1,1,0],[0,0,1,1], color=color)
+                ax1.set_ylim(0,1)
+                ax1.set_xlim(0,1)
+                plt.axis("off")
+                ax2 = fig.add_subplot(spec[1, count])
+                ax2.plot([0,1],[0.25,0.25], color=color, linewidth=3)
+                ax2.set_ylim(0,0.5)
+                ax2.set_xlim(0,0.5)
+                plt.axis("off")
+            plt.subplots_adjust(wspace=0, hspace=0)
+            plt.show()

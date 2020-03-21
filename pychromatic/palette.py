@@ -11,8 +11,9 @@ class Palette(Color_utils):
 
     """
     def __init__(self, palette='default', type=''):
-        
+
         self.colors = None
+        self._palette = palette
 
 
         #if palette name is provided, assign the palette directly
@@ -29,8 +30,29 @@ class Palette(Color_utils):
 
         #or maybe just a name
         else:
-            self.assign_palette(palette)            
+            self.assign_palette(palette)
 
+    @property
+    def palette(self):
+        return self._palette
+
+    @palette.setter
+    def palette(self, palette_name):
+        """
+        A property for palette
+        """
+        #if palette name is provided, assign the palette directly
+        self._palette = palette_name
+        if palette_name == 'default':
+            self.assign_palette('default')
+
+        #if random is selected - give a random palette
+        elif palette_name == 'random':
+            self.random_palette()
+
+        #or maybe just a name
+        else:
+            self.assign_palette(palette_name)
 
     def assign_palette(self, palette_name):
         """
@@ -77,11 +99,11 @@ class Palette(Color_utils):
             self.assign_palette(random_plt)
 
 
-    def plot_colors(self, limit=None):
+    def plot_colors(self, limit=None, minimal=False):
         """
         Wrap around inherited plot function
         """
         if limit is None:
-            Color_utils.plot_colors(self, self.colors)
+            Color_utils.plot_colors(self, self.colors, minimal=minimal)
         else:
-            Color_utils.plot_colors(self, self.colors[:limit+1])
+            Color_utils.plot_colors(self, self.colors[:limit+1], minimal=minimal)
