@@ -67,7 +67,7 @@ class Multiplot:
         # Figure width in inches/home/users/menonsqr/Documents/BCC-Mo/EAM_Zhou
         fig_width_in = fig_width_pt * inches_per_pt
         # Figure height in inches
-        fig_height_in = fig_width_in * ratio
+        fig_height_in = fig_width_in * self.ratio
 
         fig_dim = (fig_width_in, fig_height_in)
 
