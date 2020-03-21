@@ -276,36 +276,3 @@ class Color_utils:
                 plt.axis("off")
             plt.subplots_adjust(wspace=0, hspace=0)
             plt.show()
-
-    def set_size(self, width, fraction=1, ratio=((5**.5 - 1) / 2.0)):
-        """
-        Set aesthetic figure dimensions to avoid scaling in latex.
-
-        Parameters
-        ----------
-        width: float
-                Width in pts
-        fraction: float
-                Fraction of the width which you wish the figure to occupy
-        Returns
-        -------
-        fig_dim: tuple
-                Dimensions of figure in inches
-        """
-        # Width of figure
-        fig_width_pt = width * fraction
-
-        # Convert from pt to inches
-        inches_per_pt = 1 / 72.27
-
-        # Golden ratio to set aesthetic figure height
-        #golden_ratio = (5**.5 - 1) / 2
-
-        # Figure width in inches/home/users/menonsqr/Documents/BCC-Mo/EAM_Zhou
-        fig_width_in = fig_width_pt * inches_per_pt
-        # Figure height in inches
-        fig_height_in = fig_width_in * ratio
-
-        fig_dim = (fig_width_in, fig_height_in)
-
-        return fig_dim
