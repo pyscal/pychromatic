@@ -33,7 +33,7 @@ class Multiplot:
         self.fig = plt.figure(figsize=self.set_size())
         self.spec = gridspec.GridSpec(ncols=self.columns, nrows=self.rows, figure=self.fig)
         self.axes = []
-        custom_cycler = (cycler(color=self.palette.colors)
+        custom_cycler = (cycler(color=self.palette.colors))
         #now create a set of axes
         for i in range(self.rows):
             axdummy = []
