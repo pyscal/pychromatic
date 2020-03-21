@@ -38,7 +38,8 @@ class Multiplot:
             for j in range(self.columns):
                 ax = self.fig.add_subplot(self.spec[i, j])
                 axdummy.append(ax)
-            self.axes.append(axdummy)
+            self.axes.append(np.array(axdummy))
+        self.axes = np.array(self.axes)
 
     def set_size(self):
         """
@@ -72,3 +73,6 @@ class Multiplot:
         fig_dim = (fig_width_in, fig_height_in)
 
         return fig_dim
+
+    def show(self):
+        return self.fig
