@@ -40,6 +40,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/srmnitc/pychromatic',
-    version='0.2.2-dev0',
+    version='0.2.3-dev0',
     zip_safe=False,
 )
