@@ -5,7 +5,7 @@ import matplotlib.colors as mc
 from pychromatic.palette import Palette
 from cycler import cycler
 
-class Multiplot:
+class Multiplot(Palette):
     """
     A class to easily create multiplots and return the objects for further modification
     """
@@ -19,7 +19,8 @@ class Multiplot:
         self.fraction = kwargs.get('fraction',1)
         self.ratio = kwargs.get('ratio', ((5**.5 - 1) / 2.0))
         #palette specs
-        self.palette = Palette(palette=kwargs.get('palette', 'default'))
+        #self.palette = Palette(palette=kwargs.get('palette', 'default'))
+        self.palette = kwargs.get('palette', 'default')
         #number of plots
         self.columns = kwargs.get('columns',1)
         self.rows = kwargs.get('rows',1)
@@ -33,7 +34,7 @@ class Multiplot:
         self.fig = plt.figure(figsize=self.set_size())
         self.spec = gridspec.GridSpec(ncols=self.columns, nrows=self.rows, figure=self.fig)
         self.axes = []
-        custom_cycler = (cycler(color=self.palette.colors))
+        custom_cycler = (cycler(color=self.colors))
         #now create a set of axes
         for i in range(self.rows):
             axdummy = []

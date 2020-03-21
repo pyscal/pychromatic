@@ -3,20 +3,17 @@
 
 """The setup script."""
 
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, Extension
 
 with open('README.rst') as readme_file:
     readme = readme_file.read()
-
-with open('HISTORY.rst') as history_file:
-    history = history_file.read()
 
 setup_requirements = ['pytest-runner', ]
 
 test_requirements = ['pytest>=3', ]
 
 setup(
-    author="Sarath Menon",
+    author="Sarath Menon, Abril Azocar Guzman",
     author_email='sarathmenon@mailbox.org',
     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*',
     classifiers=[
@@ -34,7 +31,7 @@ setup(
     description="a pretty color selector for python",
     install_requires=['matplotlib'],
     license="GNU General Public License v3",
-    long_description=readme + '\n\n' + history,
+    long_description=readme,
     include_package_data=True,
     keywords='pychromatic',
     name='pychromatic',
