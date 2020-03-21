@@ -8,7 +8,7 @@ class Multiplot:
     """
     A class to easily create multiplots and return the objects for further modification
     """
-    def _init__(self, width, **kwargs):
+    def __init__(self, width=510, **kwargs):
         """
         Add things
         """
