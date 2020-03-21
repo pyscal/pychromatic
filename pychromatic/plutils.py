@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.colors as mc
 from pychromatic.palette import Palette
+from cycler import cycler
 
 class Multiplot:
     """
@@ -32,11 +33,13 @@ class Multiplot:
         self.fig = plt.figure(figsize=self.set_size())
         self.spec = gridspec.GridSpec(ncols=self.columns, nrows=self.rows, figure=self.fig)
         self.axes = []
+        custom_cycler = (cycler(color=self.palette.colors)
         #now create a set of axes
         for i in range(self.rows):
             axdummy = []
             for j in range(self.columns):
                 ax = self.fig.add_subplot(self.spec[i, j])
+                ax.set_prop_cycle(custom_cycler)
                 axdummy.append(ax)
             self.axes.append(np.array(axdummy))
         self.axes = np.array(self.axes)
