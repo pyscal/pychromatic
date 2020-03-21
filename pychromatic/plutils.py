@@ -33,9 +33,9 @@ class Multiplot:
         self.spec = gridspec.GridSpec(ncols=self.columns, nrows=self.rows, figure=self.fig)
         self.axes = []
         #now create a set of axes
-        for i in range(len(self.rows)):
+        for i in range(self.rows):
             axdummy = []
-            for j in range(len(self.columns)):
+            for j in range(self.columns):
                 ax = self.fig.add_subplot(self.spec[i, j])
                 axdummy.append(ax)
             self.axes.append(axdummy)
