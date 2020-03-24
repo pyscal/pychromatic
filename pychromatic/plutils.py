@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.colors as mc
 from pychromatic.palette import Palette
 from cycler import cycler
+import pychromatic.colors as pc
 
 class Multiplot(Palette):
     """
@@ -26,12 +27,13 @@ class Multiplot(Palette):
         self.rows = kwargs.get('rows',1)
 
         self.make_plot()
+                
 
     def make_plot(self):
         """
         Make plot of the required dimensions using GridSpec
         """
-        self.fig = plt.figure(figsize=self.set_size())
+        self.fig = plt.figure(figsize=self.set_size(), edgecolor=pc.darkgrey)
         self.spec = gridspec.GridSpec(ncols=self.columns, nrows=self.rows, figure=self.fig)
         self.axes = []
         custom_cycler = (cycler(color=self.colors))
