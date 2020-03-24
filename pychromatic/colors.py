@@ -95,14 +95,14 @@ color_palettes = {
 }
 
 deprecated = {
-		"lred" : '#d7191c'
-        "lyellow" : '#fdae61'
-        "lgreen" : '#abdda4'
-        "lblue" : '#2b83ba'
-        "lgrey" : "#455A64"
-        "dred" : '#C62828'
-        "dyellow" : '#FFA000'
-        "dgreen" : '#008F68'
-        "dblue" : '#006899'
-        "dgrey" : "#424242"
+		"lred" : '#d7191c',
+        "lyellow" : '#fdae61',
+        "lgreen" : '#abdda4',
+        "lblue" : '#2b83ba',
+        "lgrey" : "#455A64",
+        "dred" : '#C62828',
+        "dyellow" : '#FFA000',
+        "dgreen" : '#008F68',
+        "dblue" : '#006899',
+        "dgrey" : "#424242",
 }
