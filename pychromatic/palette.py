@@ -104,6 +104,6 @@ class Palette(Color_utils):
         Wrap around inherited plot function
         """
         if limit is None:
-            Color_utils.plot_colors(self, self.colors, minimal=minimal)
+            Color_utils.plot_colors(self, self.colors, minimal=minimal, title=self._palette)
         else:
-            Color_utils.plot_colors(self, self.colors[:limit+1], minimal=minimal)
+            Color_utils.plot_colors(self, self.colors[:limit+1], minimal=minimal, title=self._palette)

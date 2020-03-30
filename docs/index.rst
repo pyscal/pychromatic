@@ -8,6 +8,7 @@ Welcome to pychromatic's documentation!
    readme
    installation
    usage
+   colors/colors
    modules
    contributing
    authors

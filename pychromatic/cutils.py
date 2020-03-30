@@ -231,7 +231,7 @@ class Color_utils:
         cmap = mc.LinearSegmentedColormap.from_list("", colors)
         return cmap
 
-    def plot_colors(self, colors, minimal=False):
+    def plot_colors(self, colors, minimal=False, title=None):
         """
         Show plot to illustrate the colors
 
@@ -257,6 +257,7 @@ class Color_utils:
                     axs[0].plot(x, y+count/3., color=color, label="%s"%color, linewidth=4)
             axs[1].pie((np.random.dirichlet(np.ones(len(colors)),size=1)*100)[0], colors=colors, autopct='%1.1f%%', startangle=90)
             axs[1].axis('equal')
+            axs[1].set_title(title)
             axs[2].bar(np.arange(len(colors)), np.arange(len(colors))+1,color=colors,linewidth=0)
             axs[2].set_xticks(np.arange(len(colors))+0.4)
             plt.show()
