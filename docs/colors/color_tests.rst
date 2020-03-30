@@ -1,19 +1,6 @@
-.. code:: ipython3
 
-    from pychromatic import Palette
-    from pychromatic import Multiplot
-
-.. code:: ipython3
-
-    from pychromatic.colors import color_palettes
-
-.. code:: ipython3
-
-    for cp in color_palettes:
-        pal = Palette(palette=cp)
-        pal.plot_colors()
-
-
+Palettes in pychromatic
+=======================
 
 .. image:: output_2_0.png
 
@@ -76,4 +63,3 @@
 
 
 .. image:: output_2_15.png
-
