@@ -105,4 +105,27 @@ deprecated = {
         "dgreen" : '#008F68',
         "dblue" : '#006899',
         "dgrey" : "#424242",
+        "pred" : "#e58080",
+        "pyellow" : "#ffc766",
+        "pgreen" : "#85e085",
+        "pblue" : "#66cfff",
+        "pgrey" : "#b3b3b3",
+}
+
+accent = {
+		"lred" : '#d7191c',
+        "lyellow" : '#fdae61',
+        "lgreen" : '#abdda4',
+        "lblue" : '#2b83ba',
+        "lgrey" : "#455A64",
+        "dred" : '#C62828',
+        "dyellow" : '#FFA000',
+        "dgreen" : '#008F68',
+        "dblue" : '#006899',
+        "dgrey" : "#424242",
+        "pred" : "#e58080",
+        "pyellow" : "#ffc766",
+        "pgreen" : "#85e085",
+        "pblue" : "#66cfff",
+        "pgrey" : "#b3b3b3",
 }
