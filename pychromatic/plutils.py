@@ -64,9 +64,25 @@ class Multiplot(PlotTemplate):
         self.columns = kwargs.get('columns',1)
         self.rows = kwargs.get('rows',1)
         self.rows = kwargs.get('rows',1)
+        self.wratios = kwargs.get('width_ratios', self.columns)
+        self.hratios = kwargs.get('height_ratios', self.rows)
 
         self.make_plot()
                 
+
+    def __getitem__(self, ax):
+        """
+        Access method
+        """
+        print(type(ax))
+        if not isinstance(ax, tuple):
+            raise IndexError("at least length two required")
+
+        if len(ax) == 2:
+            return self.axes[ax[0]][ax[1]]
+
+        elif len(ax) == 3:
+            return self.subaxes[ax[0]][ax[1]][ax[2]]
 
     def make_plot(self):
         """
@@ -93,15 +109,17 @@ class Multiplot(PlotTemplate):
                 axdummy.append(ax)
                 saxdummy.append([])
             self.axes.append(np.array(axdummy))
-            self.subaxes.append(np.array(saxdummy))
+            self.subaxes.append(saxdummy)
         self.axes = np.array(self.axes)
-        self.subaxes = np.array(self.subaxes)
+        #self.subaxes = np.array(self.subaxes)
 
 
     def add_subplot(self, index, rows=1, columns=1, hide_axes=True):
         """
         make subplots
         """
+        custom_cycler = (cycler(color=self.colors))
+
         if len(index) != 2:
             raise TypeError("Index should be of length 2")
         if index[0] >= self.rows:
@@ -114,14 +132,13 @@ class Multiplot(PlotTemplate):
         for r in range(rows):
             for c in range(columns):
                 ax = self.fig.add_subplot(gs[r, c])
+                ax.set_prop_cycle(custom_cycler)
                 #set ticks
                 ax.tick_params(which='major', length=4, width=1, 
                           direction='in', bottom=True, top=False, 
                           right=False, color=pc.accent["dgrey"])
 
-                subx = list(self.subaxes)
-                subx[index[0]][index[1]]  = np.append(subx[index[0]][index[1]], ax)
-                self.subaxes = subx
+                self.subaxes[index[0]][index[1]].append(ax)
 
         if hide_axes:
             self.turn_off_axes(index)
