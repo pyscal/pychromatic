@@ -98,7 +98,7 @@ class Multiplot(PlotTemplate):
         self.subaxes = np.array(self.subaxes)
 
 
-    def make_subplots(self, index, rows=1, columns=1, hide_axes=True):
+    def add_subplot(self, index, rows=1, columns=1, hide_axes=True):
         """
         make subplots
         """
@@ -154,7 +154,7 @@ class Multiplot(PlotTemplate):
             self.axes[index[0], index[1]][subindex].set_ylabel(" ")
             self.axes[index[0], index[1]][subindex].set_xlabel(" ")
 
-    
+
 
 
 class BrokenAxes(PlotTemplate):
