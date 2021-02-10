@@ -232,6 +232,8 @@ class Multiplot(PlotTemplate):
             ax2b.spines['left'].set_visible(False)
             ax2a.set_xticklabels([])
             ax2b.set_xticklabels([])
+            ax2a.set_yticklabels([])
+            ax2b.set_yticklabels([])
 
             ax2a.plot([xhi1-tilt*norm1, xhi1+tilt*norm1], [ylo-d/2, ylo+d/2], color=pc.accent["dgrey"])[0].set_clip_on(False)
             ax2a.plot([xhi1-tilt*norm1, xhi1+tilt*norm1], [yhi-d/2, yhi+d/2], color=pc.accent["dgrey"])[0].set_clip_on(False)
@@ -283,6 +285,8 @@ class Multiplot(PlotTemplate):
             ax2b.spines['bottom'].set_visible(False)
             ax2a.set_xticklabels([])
             ax2b.set_xticklabels([])
+            ax2a.set_yticklabels([])
+            ax2b.set_yticklabels([])
 
 
             ax2a.plot([xlo-d/2, xlo+d/2], [yhi1-tilt*norm1, yhi1+tilt*norm1],  color=pc.accent["dgrey"])[0].set_clip_on(False)
