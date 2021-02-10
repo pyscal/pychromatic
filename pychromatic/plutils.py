@@ -42,6 +42,7 @@ class PlotTemplate(Palette):
 
     def show(self):
         return self.fig
+
                     
 class Multiplot(PlotTemplate):
     """
@@ -62,6 +63,7 @@ class Multiplot(PlotTemplate):
         #number of plots
         self.columns = kwargs.get('columns',1)
         self.rows = kwargs.get('rows',1)
+        self.rows = kwargs.get('rows',1)
 
         self.make_plot()
                 
@@ -73,19 +75,86 @@ class Multiplot(PlotTemplate):
         self.fig = plt.figure(figsize=self.set_size(), edgecolor=pc.darkgrey)
         self.spec = gridspec.GridSpec(ncols=self.columns, nrows=self.rows, figure=self.fig)
         self.axes = []
+        self.subaxes = []
         custom_cycler = (cycler(color=self.colors))
         #now create a set of axes
         for i in range(self.rows):
             axdummy = []
+            saxdummy = []
             for j in range(self.columns):
                 ax = self.fig.add_subplot(self.spec[i, j])
                 ax.set_prop_cycle(custom_cycler)
+
+                #set ticks
+                ax.tick_params(which='major', length=4, width=1, 
+                          direction='in', bottom=True, top=False, 
+                          right=False, color=pc.accent["dgrey"])
+
                 axdummy.append(ax)
+                saxdummy.append([])
             self.axes.append(np.array(axdummy))
+            self.subaxes.append(np.array(saxdummy))
         self.axes = np.array(self.axes)
+        self.subaxes = np.array(self.subaxes)
 
 
+    def make_subplots(self, index, rows=1, columns=1, hide_axes=True):
+        """
+        make subplots
+        """
+        if len(index) != 2:
+            raise TypeError("Index should be of length 2")
+        if index[0] >= self.rows:
+            raise ValueError("index should be less than set rows")
+        if index[1] >= self.columns:
+            raise ValueError("index should be less than set columns")
 
+
+        gs = gridspec.GridSpecFromSubplotSpec(rows, columns, subplot_spec=self.spec[index[0], index[1]])
+        for r in range(rows):
+            for c in range(columns):
+                ax = self.fig.add_subplot(gs[r, c])
+                #set ticks
+                ax.tick_params(which='major', length=4, width=1, 
+                          direction='in', bottom=True, top=False, 
+                          right=False, color=pc.accent["dgrey"])
+
+                subx = list(self.subaxes)
+                subx[index[0]][index[1]]  = np.append(subx[index[0]][index[1]], ax)
+                self.subaxes = subx
+
+        if hide_axes:
+            self.turn_off_axes(index)
+
+    #now turn off main axes
+    def turn_off_axes(self, index, subindex=None):
+        """
+        Turn off axes
+        """
+        if subindex is None:
+            self.axes[index[0], index[1]].spines['right'].set_visible(False)
+            self.axes[index[0], index[1]].spines['left'].set_visible(False)
+            self.axes[index[0], index[1]].spines['top'].set_visible(False)
+            self.axes[index[0], index[1]].spines['bottom'].set_visible(False)
+            self.axes[index[0], index[1]].set_xticklabels([])
+            self.axes[index[0], index[1]].set_yticklabels([])
+            self.axes[index[0], index[1]].xaxis.set_ticks_position('none')
+            self.axes[index[0], index[1]].yaxis.set_ticks_position('none')
+            self.axes[index[0], index[1]].set_ylabel(" ")
+            self.axes[index[0], index[1]].set_xlabel(" ")
+        else:
+            self.axes[index[0], index[1]][subindex].spines['right'].set_visible(False)
+            self.axes[index[0], index[1]][subindex].spines['left'].set_visible(False)
+            self.axes[index[0], index[1]][subindex].spines['top'].set_visible(False)
+            self.axes[index[0], index[1]][subindex].spines['bottom'].set_visible(False)
+            self.axes[index[0], index[1]][subindex].set_xticklabels([])
+            self.axes[index[0], index[1]][subindex].set_yticklabels([])
+            self.axes[index[0], index[1]][subindex].xaxis.set_ticks_position('none')
+            self.axes[index[0], index[1]][subindex].yaxis.set_ticks_position('none')
+            self.axes[index[0], index[1]][subindex].set_ylabel(" ")
+            self.axes[index[0], index[1]][subindex].set_xlabel(" ")
+
+    
 
 
 class BrokenAxes(PlotTemplate):
