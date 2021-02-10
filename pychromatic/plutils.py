@@ -175,7 +175,131 @@ class Multiplot(PlotTemplate):
             self.axes[index[0], index[1]][subindex].set_ylabel(" ")
             self.axes[index[0], index[1]][subindex].set_xlabel(" ")
 
+    def add_brokenaxes(self, index, x, y, d=0.06, tilt=0.01, hspace=None, wspace=0.2):
+        """
+        Add a broken axes plot
+        """
+        #first check if it is a gridspec or a subplot
+        if len(index) != 2:
+            raise TypeError("Index should be of length 2")
+        if index[0] >= self.rows:
+            raise ValueError("index should be less than set rows")
+        if index[1] >= self.columns:
+            raise ValueError("index should be less than set columns")
 
+
+        if len(x)==4:
+            seg1 = x[1]-x[0]
+            seg2 = x[3]-x[2]
+            xlo1 = x[0]
+            xlo2 = x[2]
+            xhi1 = x[1]
+            xhi2 = x[3]
+            ylo = y[0]
+            yhi = y[1]
+            widths = [seg1, seg2]
+
+            gs = gridspec.GridSpecFromSubplotSpec(1, 2, subplot_spec=self.spec[index[0], index[1]],
+                hspace=hspace, wspace=wspace, width_ratios=widths)
+            
+            ax2a = self.fig.add_subplot(gs[0, 0])
+            ax2b = self.fig.add_subplot(gs[0, 1], sharey=ax2a)
+            
+            ax2a.set_xlim(xlo1, xhi1)
+            ax2b.set_xlim(xlo2, xhi2)
+            ax2a.set_ylim(ylo, yhi)
+            ax2b.set_ylim(ylo, yhi)
+
+            norm1 = (widths[0]/sum(widths))
+            norm2 = (widths[1]/sum(widths))
+
+            #ax2m.tick_params(which='major', length=3, width=1, direction='in', 
+            #                 bottom=False, top=False, right=False, left=False, 
+            #                 labelbottom=False, labelleft=False, 
+            #                 color=pc.accent["dgrey"],zorder=1000)
+
+            ax2a.tick_params(which='major', length=3, width=1, direction='in', 
+                             bottom=True, top=False, right=False, color=pc.accent["dgrey"])
+            ax2b.tick_params(which='major', length=3, width=1, direction='in', 
+                             bottom=True, top=False, right=False, left=False, 
+                             labelleft=False, color=pc.accent["dgrey"])    
+
+            #ax2m.spines['right'].set_visible(False)
+            #ax2m.spines['left'].set_visible(False)
+            #ax2m.spines['top'].set_visible(False)
+            #ax2m.spines['bottom'].set_visible(False)
+            ax2a.spines['right'].set_visible(False)
+            ax2b.spines['left'].set_visible(False)
+            ax2a.set_xticklabels([])
+            ax2b.set_xticklabels([])
+
+            ax2a.plot([xhi1-tilt*norm1, xhi1+tilt*norm1], [ylo-d/2, ylo+d/2], color=pc.accent["dgrey"])[0].set_clip_on(False)
+            ax2a.plot([xhi1-tilt*norm1, xhi1+tilt*norm1], [yhi-d/2, yhi+d/2], color=pc.accent["dgrey"])[0].set_clip_on(False)
+            ax2b.plot([xlo2-tilt*norm2, xlo2+tilt*norm2], [ylo-d/2, ylo+d/2], color=pc.accent["dgrey"])[0].set_clip_on(False)
+            ax2b.plot([xlo2-tilt*norm2, xlo2+tilt*norm2], [yhi-d/2, yhi+d/2], color=pc.accent["dgrey"])[0].set_clip_on(False)
+
+        elif len(self.y)==4:
+            seg1 = y[1]-y[0]
+            seg2 = y[3]-y[2]
+            ylo1 = y[0]
+            ylo2 = y[2]
+            yhi1 = y[1]
+            yhi2 = y[3]
+            xlo = x[0]
+            xhi = x[1]
+            widths = [seg1, seg2]
+
+            gs = gridspec.GridSpecFromSubplotSpec(2, 1, subplot_spec=self.spec[index[0], index[1]],
+                hspace=hspace, wspace=wspace, width_ratios=widths)
+            
+            ax2a = self.fig.add_subplot(gs[0, 0])
+            ax2b = self.fig.add_subplot(gs[1, 0], sharex=ax2a)
+
+            ax2a.set_ylim(ylo1, yhi1)
+            ax2b.set_ylim(ylo2, yhi2)
+            ax2a.set_xlim(xlo, xhi)
+            ax2b.set_xlim(xlo, xhi)
+            ax2m.set_xlim(xlo, xhi)
+
+            norm1 = (widths[0]/sum(widths))
+            norm2 = (widths[1]/sum(widths))
+
+            #ax2m.tick_params(which='major', length=3, width=1, direction='in', 
+            #                 bottom=False, top=False, right=False, left=False, 
+            #                 labelbottom=False, labelleft=False, 
+            #                 color=pc.accent["dgrey"],zorder=1000)
+
+            ax2a.tick_params(which='major', length=3, width=1, direction='in', 
+                             bottom=True, top=False, right=False, labeltop=False, color=pc.accent["dgrey"])
+            ax2b.tick_params(which='major', length=3, width=1, direction='in', 
+                             bottom=False, top=True, right=False, left=True, 
+                             labelbottom=False, color=pc.accent["dgrey"])    
+
+            #ax2m.spines['right'].set_visible(False)
+            #ax2m.spines['left'].set_visible(False)
+            #ax2m.spines['top'].set_visible(False)
+            #ax2m.spines['bottom'].set_visible(False)
+            ax2a.spines['top'].set_visible(False)
+            ax2b.spines['bottom'].set_visible(False)
+            ax2a.set_xticklabels([])
+            ax2b.set_xticklabels([])
+
+
+            ax2a.plot([xlo-d/2, xlo+d/2], [yhi1-tilt*norm1, yhi1+tilt*norm1],  color=pc.accent["dgrey"])[0].set_clip_on(False)
+            ax2a.plot([xhi-d/2, xhi+d/2], [yhi1-tilt*norm1, yhi1+tilt*norm1], color=pc.accent["dgrey"])[0].set_clip_on(False)
+            ax2b.plot([xlo-d/2, xlo+d/2], [ylo2-tilt*norm2, ylo2+tilt*norm2], color=pc.accent["dgrey"])[0].set_clip_on(False)
+            ax2b.plot([xhi-d/2, xhi+d/2], [ylo2-tilt*norm2, ylo2+tilt*norm2], color=pc.accent["dgrey"])[0].set_clip_on(False)
+
+        custom_cycler = (cycler(color=self.colors))
+        #ax2m.set_prop_cycle(custom_cycler)
+        ax2a.set_prop_cycle(custom_cycler)
+        ax2b.set_prop_cycle(custom_cycler)
+
+        #self.subaxes[index[0]][index[1]].append(ax2m)
+        self.subaxes[index[0]][index[1]].append(ax2a)
+        self.subaxes[index[0]][index[1]].append(ax2b)
+
+        self.turn_off_axes(index)
 
 
 class BrokenAxes(PlotTemplate):
