@@ -74,7 +74,7 @@ class Multiplot(PlotTemplate):
         """
         Access method
         """
-        print(type(ax))
+        #print(type(ax))
         if not isinstance(ax, tuple):
             raise IndexError("at least length two required")
 
