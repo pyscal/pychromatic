@@ -66,6 +66,8 @@ class Multiplot(PlotTemplate):
         self.rows = kwargs.get('rows',1)
         self.wratios = kwargs.get('width_ratios', self.columns)
         self.hratios = kwargs.get('height_ratios', self.rows)
+        self.wspace = kwargs.get('wspace', None)
+        self.hspace = kwargs.get('hspace', None)
 
         self.make_plot()
                 
@@ -89,7 +91,8 @@ class Multiplot(PlotTemplate):
         Make plot of the required dimensions using GridSpec
         """
         self.fig = plt.figure(figsize=self.set_size(), edgecolor=pc.darkgrey)
-        self.spec = gridspec.GridSpec(ncols=self.columns, nrows=self.rows, figure=self.fig)
+        self.spec = gridspec.GridSpec(ncols=self.columns, nrows=self.rows, figure=self.fig,
+            wspace=self.wspace, hspace=self.hspace)
         self.axes = []
         self.subaxes = []
         custom_cycler = (cycler(color=self.colors))
@@ -114,7 +117,7 @@ class Multiplot(PlotTemplate):
         #self.subaxes = np.array(self.subaxes)
 
 
-    def add_subplot(self, index, rows=1, columns=1, hide_axes=True):
+    def add_subplot(self, index, rows=1, columns=1, hide_axes=True, wspace=None, hspace=None):
         """
         make subplots
         """
@@ -128,7 +131,8 @@ class Multiplot(PlotTemplate):
             raise ValueError("index should be less than set columns")
 
 
-        gs = gridspec.GridSpecFromSubplotSpec(rows, columns, subplot_spec=self.spec[index[0], index[1]])
+        gs = gridspec.GridSpecFromSubplotSpec(rows, columns, subplot_spec=self.spec[index[0], index[1]],
+            hspace=hspace, wspace=wspace)
         for r in range(rows):
             for c in range(columns):
                 ax = self.fig.add_subplot(gs[r, c])
