@@ -6,7 +6,38 @@ import matplotlib.colors as mc
 from pychromatic.palette import Palette
 import matplotlib.gridspec as gridspec
 import pychromatic.colors as colorlist
+from IPython.display import display, Markdown, Latex
 
+def tabulate(columnlist, header=None):
+    """
+    Pretty print tables
+    """
+    if len(columnlist) != len(header):
+        raise ValueError("Length of columns and headers do not match")
+
+    output = []
+    for i in range(len(header)):
+        output.append("|")
+        output.append(header[i])
+    output.append("|")
+    output.append("\n")
+
+    #add a line
+    for i in range(len(header)):
+        output.append("|")
+        output.append("---")
+    output.append("|")
+    output.append("\n")
+
+    #now format the values
+    for i in range(len(columnlist[0])):
+        for j in range(len(header)):
+            output.append("|")
+            output.append(str(columnlist[j][i]))
+        output.append("|")
+        output.append("\n")        
+    outstr = "".join(output)
+    display(Markdown(outstr))
 
 def chromatify(add_subplot): 
     def modify_plot(*args, **kwargs): 
