@@ -12,13 +12,18 @@ def tabulate(columnlist, header=None, fmt=None):
     """
     Pretty print tables
     """
-    if len(columnlist) != len(header):
-        raise ValueError("Length of columns and headers do not match")
+    if header is not None:
+        if len(columnlist) != len(header):
+            raise ValueError("Length of columns and headers do not match")
     if fmt is not None:
         if len(columnlist) != len(fmt):
             raise ValueError("Length of columns and headers do not match")
-
+   
     output = []
+
+    if header is None:
+        header = [str(i) for i in range(len(columnlist))]
+    
     for i in range(len(header)):
         output.append("|")
         output.append(header[i])
@@ -39,7 +44,7 @@ def tabulate(columnlist, header=None, fmt=None):
             if fmt is None:
                 output.append(str(columnlist[j][i]))
             else:
-                output.append(fmt%columnlist[j][i])
+                output.append(fmt[j]%columnlist[j][i])
         output.append("|")
         output.append("\n")        
     outstr = "".join(output)
