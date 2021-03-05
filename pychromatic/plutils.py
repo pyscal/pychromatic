@@ -64,8 +64,8 @@ class Multiplot(PlotTemplate):
         self.columns = kwargs.get('columns',1)
         self.rows = kwargs.get('rows',1)
         self.rows = kwargs.get('rows',1)
-        self.wratios = kwargs.get('width_ratios', self.columns)
-        self.hratios = kwargs.get('height_ratios', self.rows)
+        self.wratios = kwargs.get('width_ratios', [1 for x in range(self.columns)])
+        self.hratios = kwargs.get('height_ratios', [1 for x in range(self.rows)])
         self.wspace = kwargs.get('wspace', None)
         self.hspace = kwargs.get('hspace', None)
 
@@ -92,7 +92,7 @@ class Multiplot(PlotTemplate):
         """
         self.fig = plt.figure(figsize=self.set_size(), edgecolor=pc.darkgrey)
         self.spec = gridspec.GridSpec(ncols=self.columns, nrows=self.rows, figure=self.fig,
-            wspace=self.wspace, hspace=self.hspace)
+            wspace=self.wspace, hspace=self.hspace, width_ratios=self.wratios, height_ratios=self.hratios)
         self.axes = []
         self.subaxes = []
         custom_cycler = (cycler(color=self.colors))
@@ -305,6 +305,28 @@ class Multiplot(PlotTemplate):
 
         self.turn_off_axes(index)
 
+    def add_table(self, index, columnlist, header=None, fontsize=14, scale=(2,2), loc="center", **kwargs):
+        """
+        Add table to the plot
+        """
+        if header is not None:
+            if len(columnlist) != len(header):
+                raise ValueError("Length of columns and headers do not match")
+
+        if header is None:
+            header = [str(i) for i in range(len(columnlist))]
+
+        self.axes[index[0], index[1]].xaxis.set_visible(False)
+        self.axes[index[0], index[1]].yaxis.set_visible(False)
+
+        self.axes[index[0], index[1]].spines['right'].set_visible(False)
+        self.axes[index[0], index[1]].spines['top'].set_visible(False)
+        self.axes[index[0], index[1]].spines['left'].set_visible(False)
+        self.axes[index[0], index[1]].spines['bottom'].set_visible(False)
+
+        y = self.axes[index[0], index[1]].table(cellText=np.array(columnlist).T,colLabels=header,loc=loc, **kwargs)
+        y.set_fontsize(fontsize)
+        y.scale(scale[0], scale[1])
 
 class BrokenAxes(PlotTemplate):
     """
