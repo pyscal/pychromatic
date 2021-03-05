@@ -325,10 +325,10 @@ class Multiplot(PlotTemplate):
             fmt = ["%s" for i in range(len(columnlist))]
 
         newdata = []
-        for i in range(len(fmtdata)):
+        for i in range(len(columnlist)):
             temp = []
-            for j in range(len(fmtdata[i])):
-                temp.append(fmt[i]%fmtdata[i][j])
+            for j in range(len(columnlist[i])):
+                temp.append(fmt[i]%columnlist[i][j])
             newdata.append(np.array(temp))
 
         self.axes[index[0], index[1]].xaxis.set_visible(False)
@@ -339,7 +339,7 @@ class Multiplot(PlotTemplate):
         self.axes[index[0], index[1]].spines['left'].set_visible(False)
         self.axes[index[0], index[1]].spines['bottom'].set_visible(False)
 
-        y = self.axes[index[0], index[1]].table(cellText=np.array(columnlist).T,colLabels=header,loc=loc, **kwargs)
+        y = self.axes[index[0], index[1]].table(cellText=np.array(newdata).T,colLabels=header,loc=loc, **kwargs)
         y.set_fontsize(fontsize)
         y.scale(scale[0], scale[1])
 
