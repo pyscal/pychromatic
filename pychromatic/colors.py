@@ -129,3 +129,27 @@ accent = {
         "pblue" : "#66cfff",
         "pgrey" : "#b3b3b3",
 }
+
+chromate = {
+	"dark":{
+        "red" : '#C62828',
+        "yellow" : '#FFA000',
+        "green" : '#008F68',
+        "blue" : '#006899',
+        "grey" : "#424242",
+	},
+	"light":{
+		"red" : '#d7191c',
+        "yellow" : '#fdae61',
+        "green" : '#abdda4',
+        "blue" : '#2b83ba',
+        "grey" : "#455A64",
+	},
+	"pastel":{
+        "red" : "#e58080",
+        "yellow" : "#ffc766",
+        "green" : "#85e085",
+        "blue" : "#66cfff",
+        "grey" : "#b3b3b3",
+	}
+}
