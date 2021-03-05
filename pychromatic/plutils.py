@@ -308,10 +308,24 @@ class Multiplot(PlotTemplate):
         self.turn_off_axes(index)
 
     def add_table(self, index, columnlist, header=None, fmt=None,
-        fontsize=14, scale=(2,2), loc="center", **kwargs):
+        fontsize=14, scale=(2,2), loc="center", edgecolor=None, 
+        bold=True, headercolor=None, textcolor=None, headertextcolor=None, 
+        cellcolor=None, **kwargs):
         """
         Add table to the plot
         """
+        if edgecolor is None:
+            edgecolor = pc.chromate["light"]["grey"]
+        if headercolor is None:
+            headercolor = pc.chromate["pastel"]["red"]
+        if cellcolor is None:
+            cellcolor = "w"
+        if textcolor is None:
+            textcolor = "black"
+        if headertextcolor is None:
+            headertextcolor = "black"
+
+
         if header is not None:
             if len(columnlist) != len(header):
                 raise ValueError("Length of columns and headers do not match")
@@ -342,6 +356,19 @@ class Multiplot(PlotTemplate):
         y = self.axes[index[0], index[1]].table(cellText=np.array(newdata).T,colLabels=header,loc=loc, **kwargs)
         y.set_fontsize(fontsize)
         y.scale(scale[0], scale[1])
+
+        for k, cell in y._cells.items():
+            cell.set_edgecolor(edgecolor)
+            if k[0] == 0:
+                if bold:
+                    cell.set_text_props(weight='bold', color=headertextcolor)
+                else:
+                    cell.set_text_props(color=headertextcolor)
+                cell.set_facecolor(headercolor)
+            else:
+                cell.set_text_props(color=textcolor)
+                cell.set_facecolor(cellcolor)
+
         self.tables.append(y)
 
     def chromatify(self, index, **kwargs):
