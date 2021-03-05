@@ -315,18 +315,21 @@ class Multiplot(PlotTemplate):
         if header is not None:
             if len(columnlist) != len(header):
                 raise ValueError("Length of columns and headers do not match")
+        else:
+            header = [str(i) for i in range(len(columnlist))]
+
         if fmt is not None:
             if len(columnlist) != len(fmt):
                 raise ValueError("Length of columns and fmt do not match")
+        else:
+            fmt = ["%s" for i in range(len(columnlist))]
 
-        if header is None:
-            header = [str(i) for i in range(len(columnlist))]
-
-        fmtdata = copy(columnlist)
-        if fmt is not None:
-            for i in range(len(fmtdata)):
-                for j in range(len(fmtdata[i])):
-                    fmtdata[i][j] = fmt[i]%fmtdata[i][j]
+        newdata = []
+        for i in range(len(fmtdata)):
+            temp = []
+            for j in range(len(fmtdata[i])):
+                temp.append(fmt[i]%fmtdata[i][j])
+            newdata.append(np.array(temp))
 
         self.axes[index[0], index[1]].xaxis.set_visible(False)
         self.axes[index[0], index[1]].yaxis.set_visible(False)
