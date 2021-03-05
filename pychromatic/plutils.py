@@ -68,7 +68,7 @@ class Multiplot(PlotTemplate):
         self.hratios = kwargs.get('height_ratios', [1 for x in range(self.rows)])
         self.wspace = kwargs.get('wspace', None)
         self.hspace = kwargs.get('hspace', None)
-        self.colors = pc.chromate
+        self.colors = pc.chromate["dark"]
 
         self.make_plot()
                 
