@@ -70,7 +70,7 @@ class Multiplot(PlotTemplate):
         self.wspace = kwargs.get('wspace', None)
         self.hspace = kwargs.get('hspace', None)
         self.colors = pc.chromate["dark"]
-
+        self.tables = []
         self.make_plot()
                 
 
@@ -342,6 +342,7 @@ class Multiplot(PlotTemplate):
         y = self.axes[index[0], index[1]].table(cellText=np.array(newdata).T,colLabels=header,loc=loc, **kwargs)
         y.set_fontsize(fontsize)
         y.scale(scale[0], scale[1])
+        self.tables.append(y)
 
     def chromatify(self, index, **kwargs):
         """
