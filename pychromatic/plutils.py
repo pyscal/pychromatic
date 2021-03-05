@@ -5,6 +5,7 @@ import matplotlib.colors as mc
 from pychromatic.palette import Palette
 from cycler import cycler
 import pychromatic.colors as pc
+from copy import copy
 
 class PlotTemplate(Palette):
     def set_size(self):
@@ -306,16 +307,26 @@ class Multiplot(PlotTemplate):
 
         self.turn_off_axes(index)
 
-    def add_table(self, index, columnlist, header=None, fontsize=14, scale=(2,2), loc="center", **kwargs):
+    def add_table(self, index, columnlist, header=None, fmt=None,
+        fontsize=14, scale=(2,2), loc="center", **kwargs):
         """
         Add table to the plot
         """
         if header is not None:
             if len(columnlist) != len(header):
                 raise ValueError("Length of columns and headers do not match")
+        if fmt is not None:
+            if len(columnlist) != len(fmt):
+                raise ValueError("Length of columns and fmt do not match")
 
         if header is None:
             header = [str(i) for i in range(len(columnlist))]
+
+        fmtdata = copy(columnlist)
+        if fmt is not None:
+            for i in range(len(fmtdata)):
+                for j in range(len(fmtdata[i])):
+                    fmtdata[i][j] = fmt[i]%fmtdata[i][j]
 
         self.axes[index[0], index[1]].xaxis.set_visible(False)
         self.axes[index[0], index[1]].yaxis.set_visible(False)
