@@ -328,6 +328,37 @@ class Multiplot(PlotTemplate):
         y.set_fontsize(fontsize)
         y.scale(scale[0], scale[1])
 
+    def chromatify(self, index, **kwargs):
+        """
+        Chromatify the plot
+        """
+        labelsize = kwargs.get('labelsize',  12)
+        color = kwargs.get('color',  "#37474F")
+        colors = kwargs.get('color',  pc.color_palettes['set6']['colors'])
+        xlabel = kwargs.get('xlabel',  'mlt[%d,%d].set_xlabel()'%(index[0], index[1]))
+        ylabel = kwargs.get('ylabel',  'mlt[%d,%d].set_ylabel()'%(index[0], index[1]))
+        labelfont = kwargs.get('labelfont',  12)
+
+        self.axes[index[0], index[1]].tick_params(which='major', length=0, width=1, 
+                       direction='in', bottom=True, top=False, 
+                       right=False, color=color, 
+                       labelsize=labelsize)
+
+        self.axes[index[0], index[1]].spines['top'].set_visible(False)
+        self.axes[index[0], index[1]].spines['right'].set_visible(False)
+        self.axes[index[0], index[1]].spines['bottom'].set_color("#37474F")
+        self.axes[index[0], index[1]].spines['left'].set_color("#37474F")
+        
+        self.axes[index[0], index[1]].xaxis.label.set_color("#37474F")
+        self.axes[index[0], index[1]].yaxis.label.set_color("#37474F")
+        #Change custom plot colors
+        custom_cycler = (cycler(color=colors))
+        self.axes[index[0], index[1]].set_prop_cycle(custom_cycler)       
+        
+        #labels
+        self.axes[index[0], index[1]].set_xlabel(xlabel, fontsize=labelfont)
+        self.axes[index[0], index[1]].set_ylabel(ylabel, fontsize=labelfont)       
+
 class BrokenAxes(PlotTemplate):
     """
     Broken axes plot object
