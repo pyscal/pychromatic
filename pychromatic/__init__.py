@@ -1,4 +1,4 @@
-__version__ = '0.5.9'
+__version__ = '0.5.10'
 
 from pychromatic.palette import Palette
 from pychromatic.plutils import Multiplot, BrokenAxes
