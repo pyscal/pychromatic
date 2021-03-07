@@ -134,9 +134,9 @@ class Multiplot(PlotTemplate):
             raise ValueError("index should be less than set columns")
 
         if width_ratios is None:
-            width_ratios = [1 for x in range(self.columns)]
+            width_ratios = [1 for x in range(columns)]
         if height_ratios is None:
-            height_ratios = [1 for x in range(self.rows)]
+            height_ratios = [1 for x in range(rows)]
 
         gs = gridspec.GridSpecFromSubplotSpec(rows, columns, subplot_spec=self.spec[index[0], index[1]],
             hspace=hspace, wspace=wspace, width_ratios=width_ratios, height_ratios=height_ratios)
