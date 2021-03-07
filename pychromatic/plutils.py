@@ -270,7 +270,7 @@ class Multiplot(PlotTemplate):
             ax2b.set_ylim(ylo2, yhi2)
             ax2a.set_xlim(xlo, xhi)
             ax2b.set_xlim(xlo, xhi)
-            ax2m.set_xlim(xlo, xhi)
+            #ax2m.set_xlim(xlo, xhi)
 
             norm1 = (widths[0]/sum(widths))
             norm2 = (widths[1]/sum(widths))
