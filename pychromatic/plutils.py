@@ -119,7 +119,8 @@ class Multiplot(PlotTemplate):
         #self.subaxes = np.array(self.subaxes)
 
 
-    def add_subplot(self, index, rows=1, columns=1, hide_axes=True, wspace=None, hspace=None):
+    def add_subplot(self, index, rows=1, columns=1, hide_axes=True, wspace=None, hspace=None,
+        width_ratios=None, height_ratios=None):
         """
         make subplots
         """
@@ -132,9 +133,13 @@ class Multiplot(PlotTemplate):
         if index[1] >= self.columns:
             raise ValueError("index should be less than set columns")
 
+        if width_ratios is None:
+            width_ratios = [1 for x in range(self.columns)]
+        if height_ratios is None:
+            height_ratios = [1 for x in range(self.rows)]
 
         gs = gridspec.GridSpecFromSubplotSpec(rows, columns, subplot_spec=self.spec[index[0], index[1]],
-            hspace=hspace, wspace=wspace)
+            hspace=hspace, wspace=wspace, width_ratios=width_ratios, height_ratios=height_ratios)
         for r in range(rows):
             for c in range(columns):
                 ax = self.fig.add_subplot(gs[r, c])
