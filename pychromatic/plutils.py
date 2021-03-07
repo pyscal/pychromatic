@@ -155,11 +155,11 @@ class Multiplot(PlotTemplate):
             self.turn_off_axes(index)
 
     #now turn off main axes
-    def turn_off_axes(self, index, subindex=None):
+    def turn_off_axes(self, index):
         """
         Turn off axes
         """
-        if subindex is None:
+        if len(index) == 2:
             self.axes[index[0], index[1]].spines['right'].set_visible(False)
             self.axes[index[0], index[1]].spines['left'].set_visible(False)
             self.axes[index[0], index[1]].spines['top'].set_visible(False)
@@ -170,17 +170,19 @@ class Multiplot(PlotTemplate):
             self.axes[index[0], index[1]].yaxis.set_ticks_position('none')
             self.axes[index[0], index[1]].set_ylabel(" ")
             self.axes[index[0], index[1]].set_xlabel(" ")
+        elif len(index) == 3:
+            self.subaxes[index[0], index[1]][index[2]].spines['right'].set_visible(False)
+            self.subaxes[index[0], index[1]][index[2]].spines['left'].set_visible(False)
+            self.subaxes[index[0], index[1]][index[2]].spines['top'].set_visible(False)
+            self.subaxes[index[0], index[1]][index[2]].spines['bottom'].set_visible(False)
+            self.subaxes[index[0], index[1]][index[2]].set_xticklabels([])
+            self.subaxes[index[0], index[1]][index[2]].set_yticklabels([])
+            self.subaxes[index[0], index[1]][index[2]].xaxis.set_ticks_position('none')
+            self.subaxes[index[0], index[1]][index[2]].yaxis.set_ticks_position('none')
+            self.subaxes[index[0], index[1]][index[2]].set_ylabel(" ")
+            self.subaxes[index[0], index[1]][index[2]].set_xlabel(" ")
         else:
-            self.axes[index[0], index[1]][subindex].spines['right'].set_visible(False)
-            self.axes[index[0], index[1]][subindex].spines['left'].set_visible(False)
-            self.axes[index[0], index[1]][subindex].spines['top'].set_visible(False)
-            self.axes[index[0], index[1]][subindex].spines['bottom'].set_visible(False)
-            self.axes[index[0], index[1]][subindex].set_xticklabels([])
-            self.axes[index[0], index[1]][subindex].set_yticklabels([])
-            self.axes[index[0], index[1]][subindex].xaxis.set_ticks_position('none')
-            self.axes[index[0], index[1]][subindex].yaxis.set_ticks_position('none')
-            self.axes[index[0], index[1]][subindex].set_ylabel(" ")
-            self.axes[index[0], index[1]][subindex].set_xlabel(" ")
+            raise ValueError("index should be of length 2 or 3")
 
     def add_brokenaxes(self, index, x, y, d=0.06, tilt=0.01, hspace=None, wspace=0.2):
         """
