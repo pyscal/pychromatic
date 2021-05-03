@@ -4,6 +4,7 @@ import colorsys
 import numpy as np
 import matplotlib.colors as mc
 import pychromatic.cutils as pcut
+from rich.console import Console
 
 class Color_obj:
     """
@@ -19,11 +20,17 @@ class Color_obj:
         self.originalname = name
         self.name = name
         self.util = pcut.Color_utils()
+        self.console = Console()
         self.update()
 
     #other utility functions
     def __repr__(self):
-        return "%s-%s"%(self.colorstr, self.name)
+        if self.name is not None:
+            cstr = self.name
+        else:
+            cstr = self.colorstr
+        self.console.print(cstr, style="bold %s"%self.colorstr)
+        return self.colorstr
 
     def __mul__(self, fraction):
         if fraction < 1:
