@@ -24,8 +24,8 @@ class Color_obj:
     #other utility functions
     def __repr__(self):
         self.show(minimal=True, title="red", scale=0.5)
-        print(self.name, self.colorstr)
-        return self
+        print(self.name)
+        return self.colorstr
 
     def __add__(self, colorobj):
         self.colorstr = self.util.mix_colors(self.hex, colorobj.hex, ratio=0.5)
