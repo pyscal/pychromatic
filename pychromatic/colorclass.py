@@ -23,9 +23,7 @@ class Color_obj:
 
     #other utility functions
     def __repr__(self):
-        self.show(minimal=True, title="red", scale=0.5)
-        print(self.name)
-        return self.colorstr
+        return "%s-%s"%(self.colorstr, self.name)
 
     def mix(self, colorobj, ratio=0.5):
         self.colorstr = self.util.mix_colors(self.hex, colorobj.hex, ratio=ratio)
@@ -70,7 +68,7 @@ class Color_obj:
             self.name = "-".join(["dark", self.name.split("-")[-1]])
         self.update()
 
-    def show(self, minimal=False, title=None, scale=1):
+    def show(self, minimal=True, title=None, scale=0.5):
         self.util.plot_colors([self.colorstr], minimal=minimal, title=title,
             scale=scale)
 
