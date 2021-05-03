@@ -1,6 +1,7 @@
 """
 Module containing color palettes
 """
+import pychromatic.colorclass as pcl
 
 #default colors
 red = '#d32f2f'
@@ -153,3 +154,28 @@ chromate = {
         "grey" : "#b3b3b3",
 	}
 }
+
+vista = {
+	"dark":{
+        "red" : pcl.Color_obj('#C62828'),
+        "yellow" : pcl.Color_obj('#FFA000'),
+        "green" : pcl.Color_obj('#008F68'),
+        "blue" : pcl.Color_obj('#006899'),
+        "grey" : pcl.Color_obj("#424242"),
+	},
+	"light":{
+		"red" : pcl.Color_obj('#d7191c'),
+        "yellow" : pcl.Color_obj('#fdae61'),
+        "green" : pcl.Color_obj('#abdda4'),
+        "blue" : pcl.Color_obj('#2b83ba'),
+        "grey" : pcl.Color_obj("#455A64"),
+	},
+	"pastel":{
+        "red" : pcl.Color_obj("#e58080"),
+        "yellow" : pcl.Color_obj("#ffc766"),
+        "green" : pcl.Color_obj("#85e085"),
+        "blue" : pcl.Color_obj("#66cfff"),
+        "grey" : pcl.Color_obj("#b3b3b3"),
+	}
+}
+

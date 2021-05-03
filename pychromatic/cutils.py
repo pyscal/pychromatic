@@ -231,7 +231,7 @@ class Color_utils:
         cmap = mc.LinearSegmentedColormap.from_list("", colors)
         return cmap
 
-    def plot_colors(self, colors, minimal=False, title=None):
+    def plot_colors(self, colors, minimal=False, title=None, scale=1):
         """
         Show plot to illustrate the colors
 
@@ -262,7 +262,7 @@ class Color_utils:
             axs[2].set_xticks(np.arange(len(colors))+0.4)
             plt.show()
         else:
-            fig = plt.figure(figsize=[len(colors), 1.5])
+            fig = plt.figure(figsize=[scale*len(colors), scale])
             spec = gridspec.GridSpec(ncols=len(colors), nrows=2, figure=fig)
             for count, color in enumerate(colors):
                 ax1 = fig.add_subplot(spec[0, count])
@@ -274,6 +274,8 @@ class Color_utils:
                 ax2.plot([0,1],[0.25,0.25], color=color, linewidth=3)
                 ax2.set_ylim(0,0.5)
                 ax2.set_xlim(0,0.5)
+                if title is not None:
+                    ax2.set_xlabel(title, fontsize=8)
                 plt.axis("off")
             plt.subplots_adjust(wspace=0, hspace=0)
             plt.show()
