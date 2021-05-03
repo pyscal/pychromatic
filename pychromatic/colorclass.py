@@ -25,13 +25,6 @@ class Color_obj:
     def __repr__(self):
         return "%s-%s"%(self.colorstr, self.name)
 
-    def mix(self, colorobj, ratio=0.5):
-        self.colorstr = self.util.mix_colors(self.hex, colorobj.hex, ratio=ratio)
-        if (self.name is not None) and (colorobj.name is not None):
-            self.name = "-".join([self.name.split("-")[-1], colorobj.name])
-        self.update()         
-
-
     def __mul__(self, fraction):
         if fraction < 1:
             self.brighten(fraction=fraction)
@@ -73,7 +66,11 @@ class Color_obj:
             scale=scale)
 
 
-
+    def mix(self, colorobj, ratio=0.5):
+        self.colorstr = self.util.mix_colors(self.hex, colorobj.hex, ratio=(1-ratio))
+        if (self.name is not None) and (colorobj.name is not None):
+            self.name = "-".join([self.name.split("-")[-1], colorobj.name])
+        self.update() 
 
 
 
