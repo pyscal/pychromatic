@@ -27,40 +27,25 @@ class Color_obj:
         print(self.name)
         return self.colorstr
 
-    def __add__(self, colorobj):
-        self.colorstr = self.util.mix_colors(self.hex, colorobj.hex, ratio=0.5)
+    def mix(self, colorobj, ratio=0.5):
+        self.colorstr = self.util.mix_colors(self.hex, colorobj.hex, ratio=ratio)
         if (self.name is not None) and (colorobj.name is not None):
-            self.name = "-".join([self.name, colorobj.name])
-        self.update()
-        return self
+            self.name = "-".join([self.name.split("-")[-1], colorobj.name])
+        self.update()         
 
-    def __radd__(self, colorobj):
-        self.colorstr = self.util.mix_colors(self.hex, colorobj.hex, ratio=0.5)
-        if (self.name is not None) and (colorobj.name is not None):
-            self.name = "-".join([self.name, colorobj.name])
-        self.update()       
-        return self
 
     def __mul__(self, fraction):
         if fraction < 1:
-            self.darken(fraction=fraction)
-            if self.name is not None:
-                self.name = "-".join(["dark", self.name])
+            self.brighten(fraction=fraction)
         else:
-            self.brighten(fraction=(1-fraction))
-            if self.name is not None:
-                self.name = "-".join(["light", self.name])
+            self.darken(fraction=(1-fraction))
         return self
 
     def __rmul__(self, fraction):
         if fraction < 1:
-            self.darken(fraction=fraction)
-            if self.name is not None:
-                self.name = "-".join(["dark", self.name])
+            self.brighten(fraction=fraction)
         else:
-            self.brighten(fraction=(1-fraction))
-            if self.name is not None:
-                self.name = "-".join(["light", self.name])        
+            self.darken(fraction=(1-fraction))
         return self
 
     def update(self):
@@ -76,13 +61,13 @@ class Color_obj:
     def brighten(self, fraction=0.05):
         self.colorstr = self.util.brighten(self.colorstr, fraction=fraction)
         if self.name is not None:
-            self.name = "-".join(["light", self.name])
+            self.name = "-".join(["light", self.name.split("-")[-1]])
         self.update()
 
     def darken(self, fraction=0.05):
         self.colorstr = self.util.brighten(self.colorstr, fraction=-1*fraction)
         if self.name is not None:
-            self.name = "-".join(["dark", self.name])
+            self.name = "-".join(["dark", self.name.split("-")[-1]])
         self.update()
 
     def show(self, minimal=False, title=None, scale=1):
