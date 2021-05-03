@@ -13,39 +13,54 @@ class Color_obj:
     - Mix
     - Colormap
     """
-    def __init__(self, colorstr):
+    def __init__(self, colorstr, name=None):
         self.colorstr = colorstr
         self.original = colorstr
+        self.originalname = name
+        self.name = name
         self.util = pcut.Color_utils()
         self.update()
 
     #other utility functions
     def __repr__(self):
         self.show(minimal=True, title="red", scale=0.5)
-        return self.colorstr
+        print(self.name, self.colorstr)
+        return self
 
     def __add__(self, colorobj):
         self.colorstr = self.util.mix_colors(self.hex, colorobj.hex, ratio=0.5)
+        if (self.name is not None) and (colorobj.name is not None):
+            self.name = "-".join([self.name, colorobj.name])
         self.update()
         return self
 
     def __radd__(self, colorobj):
         self.colorstr = self.util.mix_colors(self.hex, colorobj.hex, ratio=0.5)
+        if (self.name is not None) and (colorobj.name is not None):
+            self.name = "-".join([self.name, colorobj.name])
         self.update()       
         return self
 
     def __mul__(self, fraction):
         if fraction < 1:
             self.darken(fraction=fraction)
+            if self.name is not None:
+                self.name = "-".join(["dark", self.name])
         else:
             self.brighten(fraction=(1-fraction))
+            if self.name is not None:
+                self.name = "-".join(["light", self.name])
         return self
 
     def __rmul__(self, fraction):
         if fraction < 1:
             self.darken(fraction=fraction)
+            if self.name is not None:
+                self.name = "-".join(["dark", self.name])
         else:
-            self.brighten(fraction=(1-fraction))        
+            self.brighten(fraction=(1-fraction))
+            if self.name is not None:
+                self.name = "-".join(["light", self.name])        
         return self
 
     def update(self):
@@ -55,14 +70,19 @@ class Color_obj:
 
     def reset(self):
         self.colorstr = self.original
+        self.name = self.originalname
         self.update()
     
     def brighten(self, fraction=0.05):
         self.colorstr = self.util.brighten(self.colorstr, fraction=fraction)
+        if self.name is not None:
+            self.name = "-".join(["light", self.name])
         self.update()
 
     def darken(self, fraction=0.05):
         self.colorstr = self.util.brighten(self.colorstr, fraction=-1*fraction)
+        if self.name is not None:
+            self.name = "-".join(["dark", self.name])
         self.update()
 
     def show(self, minimal=False, title=None, scale=1):

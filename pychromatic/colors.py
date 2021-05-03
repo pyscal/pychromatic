@@ -157,25 +157,25 @@ chromate = {
 
 vista = {
 	"dark":{
-        "red" : pcl.Color_obj('#C62828'),
-        "yellow" : pcl.Color_obj('#FFA000'),
-        "green" : pcl.Color_obj('#008F68'),
-        "blue" : pcl.Color_obj('#006899'),
-        "grey" : pcl.Color_obj("#424242"),
+        "red" : pcl.Color_obj('#C62828', name="red"),
+        "yellow" : pcl.Color_obj('#FFA000',name="yellow"),
+        "green" : pcl.Color_obj('#008F68',name="green"),
+        "blue" : pcl.Color_obj('#006899',name="blue"),
+        "grey" : pcl.Color_obj("#424242",name="grey"),
 	},
 	"light":{
-		"red" : pcl.Color_obj('#d7191c'),
-        "yellow" : pcl.Color_obj('#fdae61'),
-        "green" : pcl.Color_obj('#abdda4'),
-        "blue" : pcl.Color_obj('#2b83ba'),
-        "grey" : pcl.Color_obj("#455A64"),
+		"red" : pcl.Color_obj('#d7191c',name="red"),
+        "yellow" : pcl.Color_obj('#fdae61',name="yellow"),
+        "green" : pcl.Color_obj('#abdda4',name="green"),
+        "blue" : pcl.Color_obj('#2b83ba',name="blue"),
+        "grey" : pcl.Color_obj("#455A64",name="grey"),
 	},
 	"pastel":{
-        "red" : pcl.Color_obj("#e58080"),
-        "yellow" : pcl.Color_obj("#ffc766"),
-        "green" : pcl.Color_obj("#85e085"),
-        "blue" : pcl.Color_obj("#66cfff"),
-        "grey" : pcl.Color_obj("#b3b3b3"),
+        "red" : pcl.Color_obj("#e58080",name="red"),
+        "yellow" : pcl.Color_obj("#ffc766",name="yellow"),
+        "green" : pcl.Color_obj("#85e085",name="green"),
+        "blue" : pcl.Color_obj("#66cfff",name="blue"),
+        "grey" : pcl.Color_obj("#b3b3b3",name="grey"),
 	}
 }
 

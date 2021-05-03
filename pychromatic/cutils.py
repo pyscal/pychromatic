@@ -274,8 +274,8 @@ class Color_utils:
                 ax2.plot([0,1],[0.25,0.25], color=color, linewidth=3)
                 ax2.set_ylim(0,0.5)
                 ax2.set_xlim(0,0.5)
-                if title is not None:
-                    ax2.set_title(title, fontsize=8, loc="left")
+                #if title is not None:
+                #    ax2.set_title(title, fontsize=8, loc="right", pad=-1*scale)
                 plt.axis("off")
             plt.subplots_adjust(wspace=0, hspace=0)
             plt.show()
