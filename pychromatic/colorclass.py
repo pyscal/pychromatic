@@ -6,7 +6,7 @@ import matplotlib.colors as mc
 import pychromatic.cutils as pcut
 from rich.console import Console
 
-class Color_obj:
+class Color:
     """
     A class which holds the info about color
 
