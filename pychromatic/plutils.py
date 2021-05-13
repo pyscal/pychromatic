@@ -6,6 +6,7 @@ from pychromatic.palette import Palette
 from cycler import cycler
 import pychromatic.colors as pc
 from copy import copy
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
 class PlotTemplate(Palette):
     def set_size(self):
@@ -313,6 +314,26 @@ class Multiplot(PlotTemplate):
         self.subaxes[index[0]][index[1]].append(ax2b)
 
         self.turn_off_axes(index)
+
+    def add_inset(self, index, width="30%", height="30%", loc=1, borderpad=1):
+        """
+        Add inset to plot
+        """
+        if len(index) != 2:
+            raise TypeError("Index should be of length 2")
+        if index[0] >= self.rows:
+            raise ValueError("index should be less than set rows")
+        if index[1] >= self.columns:
+            raise ValueError("index should be less than set columns")
+
+        ax = inset_axes(self.axes[index[0], index[1]], width=width, 
+            height=height, loc=loc, borderpad=borderpad)
+
+        custom_cycler = (cycler(color=self.colors))
+        ax.set_prop_cycle(custom_cycler)
+        self.subaxes[index[0]][index[1]].append(ax)
+
+
 
     def add_table(self, index, columnlist, header=None, fmt=None,
         fontsize=14, scale=(2,2), loc="center", edgecolor=None, 

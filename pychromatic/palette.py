@@ -8,6 +8,7 @@ import matplotlib.colors as mc
 import pychromatic.colors as colorlist
 import random
 from pychromatic.colorclass import Color
+from pychromatic.cutils import Color_utils
 import colorsys
 import numpy as np
 
@@ -38,6 +39,8 @@ class Palette():
         else:
             self.assign_palette(palette)
 
+        self.utils = Color_utils()
+
     @property
     def palette(self):
         return self._palette
@@ -60,6 +63,49 @@ class Palette():
         else:
             self.assign_palette(palette_name)
 
+    def reset(self):
+        for c in self.colors:
+            c.reset()
+
+    def add_color(self, clr, name=None, pos=None):
+        if pos is None:
+            pos = len(self.colors)+1
+
+        if isinstance(clr, str):
+            if name is None:
+                name = "color%d"%len(self.colors)
+            c = Color(clr, name=name)
+            setattr(self, name, c)
+            self.colors[pos:pos] = [c]
+        else:
+            setattr(self, clr.name, clr)
+            self.colors[pos:pos] = [c]      
+
+
+    def remove_color(self, clr):
+        delattr(self, clr)
+        pos = [i for i, c in enumerate(self.colors) if c.name==clr]
+        for p in pos:
+            del self.colors[p]
+
+    def brighten(self, clr, fraction=0.05, name=None):
+        if name is None:
+            name = "color%d"%len(self.colors)
+        hexv = self.utils.brighten(getattr(self, clr).hex, fraction=fraction)
+        c = Color(hexv, name=name)
+        setattr(self, name, c)
+        self.colors.append(c)
+
+    def darken(self, clr, fraction=0.05, name=None):
+        self.brighten(clr, fraction=-1*fraction, name=name)
+        
+
+    def mix(self):
+        pass
+
+    def cmap(self):
+        pass
+    
     def assign_palette(self, palette_name):
         """
         Assign a palatte to the class
@@ -161,7 +207,7 @@ class Palette():
                 ax2.set_yticklabels([])
                 ax2.xaxis.set_ticks_position('none')
                 ax2.yaxis.set_ticks_position('none')
-                ax2.set_xlabel(names[count], fontsize=10, rotation=90, color="#455A64")
+                ax2.set_xlabel(names[count], fontsize=10, rotation=90, color="#37474F")
 
             plt.subplots_adjust(wspace=0, hspace=0)
             plt.show()        
