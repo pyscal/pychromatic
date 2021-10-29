@@ -29,7 +29,7 @@ setup(
         'Programming Language :: Python :: 3.7',
     ],
     description="a pretty color selector for python",
-    install_requires=['matplotlib'],
+    install_requires=['matplotlib', 'rich'],
     license="GNU General Public License v3",
     long_description=readme,
     include_package_data=True,
