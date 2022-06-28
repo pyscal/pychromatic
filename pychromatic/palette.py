@@ -41,6 +41,13 @@ class Palette():
 
         self.utils = Color_utils()
 
+    def __repr__(self):
+        """
+        String of the class
+        """
+        self.show()
+        return self._palette
+
     @property
     def palette(self):
         return self._palette
@@ -95,16 +102,43 @@ class Palette():
         c = Color(hexv, name=name)
         setattr(self, name, c)
         self.colors.append(c)
+        self.show(color_list=[getattr(self, clr), c])
 
     def darken(self, clr, fraction=0.05, name=None):
-        self.brighten(clr, fraction=-1*fraction, name=name)
+        self.brighten(clr, fraction=-1*fraction, name=name)        
+
+    def mix(self, clr1, clr2, ratio=0.5, name=None):
+        if name is None:
+            name = "color%d"%len(self.colors)
+
+        color1 = getattr(self, clr1)
+        color2 = getattr(self, clr2)
+        rgb1 = self.utils.hex_to_rgb(color1.hex)
+        rgb2 = self.utils.hex_to_rgb(color2.hex)
         
+        rgb = [ratio*rgb1[x] + (1-ratio)*rgb2[x] for x in range(3)]
+        hexv = self.utils.rgb_to_hex(rgb)
+        c = Color(hexv, name=name)
+        setattr(self, name, c)
+        self.colors.append(c)
+        self.show(color_list=[color1, c, color2])
 
-    def mix(self):
-        pass
+    def get_cmap(self):
+        cmap = self.utils.create_colormap([color.hex for color in self.colors])
+        return cmap
+    
+    def get_intermediate_colors(self, clr1, clr2, num_colors=1, names=None):
+        if names is None:
+            names = ["color%d"%(len(self.colors)+x) for x in range(num_colors)]
 
-    def cmap(self):
-        pass
+        color1 = getattr(self, clr1)
+        color2 = getattr(self, clr2)        
+        clrlist = self.utils.find_intermediate_colors(color1.hex, color2.hex, colors=num_colors, ignore_edges=True)
+        clrobjlist = [Color(hexv, name=names[count]) for hexv, count in enumerate(clrlist)]
+        for c in clrobjlist:
+            self.colors.append(c)
+        self.show(color_list=clrobjlist)
+
     
     def assign_palette(self, palette_name):
         """
@@ -157,12 +191,15 @@ class Palette():
             self.assign_palette(random_plt)
 
 
-    def show(self, minimal=True, title=None, scale=0.5):
+    def show(self, color_list=None, minimal=True, title=None, scale=0.5):
         """
         Wrap around inherited plot function
         """
-        colors = [c.hex for c in self.colors]
-        names = [c.name for c in self.colors]
+        if color_list is None:
+            color_list = self.colors
+
+        colors = [c.hex for c in color_list]
+        names = [c.name for c in color_list]
         
         if not minimal:
             fig, axs = plt.subplots(1, 3, figsize=(12, 5))
