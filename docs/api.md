@@ -1,67 +1,65 @@
-=============
-API Reference
-=============
+# API Reference
 
 Complete reference for the pychromatic public API.
 
+## Top-Level Exports
 
-Top-Level Exports
------------------
-
+```{eval-rst}
 .. automodule:: pychromatic
    :members:
    :no-undoc-members:
+```
 
+## Color
 
-Color
------
-
+```{eval-rst}
 .. automodule:: pychromatic.colorclass
    :members:
    :undoc-members:
    :show-inheritance:
+```
 
+## Palette
 
-Palette
--------
-
+```{eval-rst}
 .. automodule:: pychromatic.palette
    :members:
    :undoc-members:
    :show-inheritance:
+```
 
+## Plotting Utilities
 
-Plotting Utilities
-------------------
-
+```{eval-rst}
 .. automodule:: pychromatic.plutils
    :members:
    :undoc-members:
    :show-inheritance:
+```
 
+## Color Utilities
 
-Color Utilities
----------------
-
+```{eval-rst}
 .. automodule:: pychromatic.cutils
    :members:
    :undoc-members:
    :show-inheritance:
+```
 
+## Decorators
 
-Decorators
-----------
-
+```{eval-rst}
 .. automodule:: pychromatic.decors
    :members:
    :undoc-members:
    :show-inheritance:
+```
 
+## Color Data
 
-Color Data
-----------
-
+```{eval-rst}
 .. automodule:: pychromatic.colors
    :members:
    :undoc-members:
    :show-inheritance:
+```

@@ -1,0 +1,18 @@
+format: jb-book
+root: intro
+parts:
+  - caption: Getting Started
+    chapters:
+      - file: getting_started
+  - caption: Examples
+    chapters:
+      - file: examples/colors
+      - file: examples/palettes
+      - file: examples/colormaps
+      - file: examples/colorblind
+      - file: examples/plotting
+      - file: examples/utilities
+  - caption: Reference
+    chapters:
+      - file: api
+      - file: palette_reference

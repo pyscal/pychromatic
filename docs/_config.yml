@@ -1,0 +1,54 @@
+# Jupyter Book configuration
+# https://jupyterbook.org/en/stable/customize/config.html
+
+title: pychromatic
+author: Sarath Menon
+copyright: "2024"
+logo: ""
+
+execute:
+  execute_notebooks: auto
+  timeout: 120
+  allow_errors: false
+
+parse:
+  myst_enable_extensions:
+    - colon_fence
+    - dollarmath
+    - linkify
+    - substitution
+
+html:
+  use_issues_button: true
+  use_repository_button: true
+  use_edit_page_button: true
+  home_page_in_navbar: false
+
+repository:
+  url: https://github.com/pyscal/pychromatic
+  branch: main
+  path_to_book: docs
+
+sphinx:
+  extra_extensions:
+    - sphinx.ext.autodoc
+    - sphinx.ext.napoleon
+    - sphinx.ext.viewcode
+    - sphinx.ext.intersphinx
+    - sphinx_copybutton
+  config:
+    intersphinx_mapping:
+      python:
+        - "https://docs.python.org/3"
+        - null
+      matplotlib:
+        - "https://matplotlib.org/stable"
+        - null
+      numpy:
+        - "https://numpy.org/doc/stable"
+        - null
+    autodoc_member_order: bysource
+    napoleon_google_docstring: true
+    napoleon_numpy_docstring: true
+    copybutton_prompt_text: ">>> |\\$ "
+    copybutton_prompt_is_regexp: true

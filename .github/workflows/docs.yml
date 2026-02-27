@@ -27,12 +27,12 @@ jobs:
           python-version: "3.12"
 
       - name: Install package and docs dependencies
-        run: pip install -e ".[dev]"
-
-      - name: Build Sphinx docs
         run: |
-          cd docs
-          make html
+          pip install -e .
+          pip install "jupyter-book<2" sphinx-copybutton
+
+      - name: Build Jupyter Book
+        run: jupyter-book build docs/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
