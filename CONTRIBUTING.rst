@@ -15,7 +15,7 @@ Types of Contributions
 Report Bugs
 ~~~~~~~~~~~
 
-Report bugs at https://github.com/srmnitc/pychromatic/issues.
+Report bugs at https://github.com/pyscal/pychromatic/issues.
 
 If you are reporting a bug, please include:
 
@@ -45,7 +45,7 @@ articles, and such.
 Submit Feedback
 ~~~~~~~~~~~~~~~
 
-The best way to send feedback is to file an issue at https://github.com/srmnitc/pychromatic/issues.
+The best way to send feedback is to file an issue at https://github.com/pyscal/pychromatic/issues.
 
 If you are proposing a feature:
 
@@ -64,11 +64,11 @@ Ready to contribute? Here's how to set up `pychromatic` for local development.
 
     $ git clone git@github.com:your_name_here/pychromatic.git
 
-3. Install your local copy into a virtualenv. Assuming you have virtualenvwrapper installed, this is how you set up your fork for local development::
+3. Install your local copy into a virtualenv::
 
-    $ mkvirtualenv pychromatic
-    $ cd pychromatic/
-    $ python setup.py develop
+    $ python -m venv venv
+    $ source venv/bin/activate
+    $ pip install -e ".[dev]"
 
 4. Create a branch for local development::
 
@@ -76,14 +76,11 @@ Ready to contribute? Here's how to set up `pychromatic` for local development.
 
    Now you can make your changes locally.
 
-5. When you're done making changes, check that your changes pass flake8 and the
-   tests, including testing other Python versions with tox::
+5. When you're done making changes, check that your changes pass ruff and the
+   tests::
 
-    $ flake8 pychromatic tests
-    $ python setup.py test or pytest
-    $ tox
-
-   To get flake8 and tox, just pip install them into your virtualenv.
+    $ ruff check pychromatic tests
+    $ pytest
 
 6. Commit your changes and push your branch to GitHub::
 
@@ -102,8 +99,8 @@ Before you submit a pull request, check that it meets these guidelines:
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring, and add the
    feature to the list in README.rst.
-3. The pull request should work for Python 2.7, 3.5, 3.6 and 3.7, and for PyPy. Check
-   https://travis-ci.org/srmnitc/pychromatic/pull_requests
+3. The pull request should work for Python 3.10, 3.11, 3.12, and 3.13. Check
+   the GitHub Actions CI results on your pull request
    and make sure that the tests pass for all supported Python versions.
 
 Tips
@@ -125,4 +122,4 @@ $ bump2version patch # possible: major / minor / patch
 $ git push
 $ git push --tags
 
-Travis will then deploy to PyPI if tests pass.
+GitHub Actions CI will run tests automatically. Once tests pass, upload to PyPI.

@@ -1,30 +1,31 @@
 """
 Main file containing the Palette class
 """
-import matplotlib.pyplot as plt
+from __future__ import annotations
+
+import random
+
 import matplotlib.gridspec as gridspec
-import matplotlib.colors as mc
+import matplotlib.pyplot as plt
+import numpy as np
 
 import pychromatic.colors as colorlist
-import random
+import pychromatic.cutils as cutils
 from pychromatic.colorclass import Color
-from pychromatic.cutils import Color_utils
-import colorsys
-import numpy as np
 
 class Palette():
     """
     Palette class is the main class of pychromatic that is initialised
 
     """
-    def __init__(self, palette='default', type=''):
+    def __init__(self, palette: str = 'default', palette_type: str = '') -> None:
 
-        self.colors = None
+        self.colors: list[Color] | None = None
         self._palette = palette
 
 
         #if palette name is provided, assign the palette directly
-        if palette == 'default' and type == '':
+        if palette == 'default' and palette_type == '':
             self.assign_palette('default')
 
         #if random is selected - give a random palette
@@ -32,28 +33,26 @@ class Palette():
             self.random_palette()
 
         #if a type choice is provided, select accordingly
-        elif type != '':
-            self.random_palette(type=type)
+        elif palette_type != '':
+            self.random_palette(palette_type=palette_type)
 
         #or maybe just a name
         else:
             self.assign_palette(palette)
 
-        self.utils = Color_utils()
-
-    def __repr__(self):
+    def __repr__(self) -> str:
         """
-        String of the class
+        String representation of the palette
         """
-        self.show()
-        return self._palette
+        n_colors = len(self.colors) if self.colors else 0
+        return f"Palette('{self._palette}', {n_colors} colors)"
 
     @property
-    def palette(self):
+    def palette(self) -> str:
         return self._palette
 
     @palette.setter
-    def palette(self, palette_name):
+    def palette(self, palette_name: str) -> None:
         """
         A property for palette
         """
@@ -70,77 +69,79 @@ class Palette():
         else:
             self.assign_palette(palette_name)
 
-    def reset(self):
+    def reset(self) -> None:
         for c in self.colors:
             c.reset()
 
-    def add_color(self, clr, name=None, pos=None):
+    def add_color(self, clr: str | Color, name: str | None = None, pos: int | None = None) -> None:
         if pos is None:
             pos = len(self.colors)+1
 
         if isinstance(clr, str):
             if name is None:
-                name = "color%d"%len(self.colors)
+                name = f"color{len(self.colors)}"
             c = Color(clr, name=name)
             setattr(self, name, c)
             self.colors[pos:pos] = [c]
         else:
             setattr(self, clr.name, clr)
-            self.colors[pos:pos] = [c]      
+            self.colors[pos:pos] = [clr]
 
 
-    def remove_color(self, clr):
+    def remove_color(self, clr: str) -> None:
         delattr(self, clr)
         pos = [i for i, c in enumerate(self.colors) if c.name==clr]
         for p in pos:
             del self.colors[p]
 
-    def brighten(self, clr, fraction=0.05, name=None):
+    def brighten(self, clr: str, fraction: float = 0.05, name: str | None = None) -> None:
         if name is None:
-            name = "color%d"%len(self.colors)
-        hexv = self.utils.brighten(getattr(self, clr).hex, fraction=fraction)
+            name = f"color{len(self.colors)}"
+        hexv = cutils.brighten(getattr(self, clr).hex, fraction=fraction)
         c = Color(hexv, name=name)
         setattr(self, name, c)
         self.colors.append(c)
         self.show(color_list=[getattr(self, clr), c])
 
-    def darken(self, clr, fraction=0.05, name=None):
+    def darken(self, clr: str, fraction: float = 0.05, name: str | None = None) -> None:
         self.brighten(clr, fraction=-1*fraction, name=name)        
 
-    def mix(self, clr1, clr2, ratio=0.5, name=None):
+    def mix(self, clr1: str, clr2: str, ratio: float = 0.5, name: str | None = None) -> None:
         if name is None:
-            name = "color%d"%len(self.colors)
+            name = f"color{len(self.colors)}"
 
         color1 = getattr(self, clr1)
         color2 = getattr(self, clr2)
-        rgb1 = self.utils.hex_to_rgb(color1.hex)
-        rgb2 = self.utils.hex_to_rgb(color2.hex)
+        rgb1 = cutils.hex_to_rgb(color1.hex)
+        rgb2 = cutils.hex_to_rgb(color2.hex)
         
         rgb = [ratio*rgb1[x] + (1-ratio)*rgb2[x] for x in range(3)]
-        hexv = self.utils.rgb_to_hex(rgb)
+        hexv = cutils.rgb_to_hex(rgb)
         c = Color(hexv, name=name)
         setattr(self, name, c)
         self.colors.append(c)
         self.show(color_list=[color1, c, color2])
 
-    def get_cmap(self):
-        cmap = self.utils.create_colormap([color.hex for color in self.colors])
+    def get_cmap(self) -> object:
+        cmap = cutils.create_colormap([color.hex for color in self.colors])
         return cmap
     
-    def get_intermediate_colors(self, clr1, clr2, num_colors=1, names=None):
+    def get_intermediate_colors(
+        self, clr1: str, clr2: str, num_colors: int = 1, names: list[str] | None = None
+    ) -> None:
         if names is None:
-            names = ["color%d"%(len(self.colors)+x) for x in range(num_colors)]
+            names = [f"color{len(self.colors) + x}" for x in range(num_colors)]
 
         color1 = getattr(self, clr1)
         color2 = getattr(self, clr2)        
-        clrlist = self.utils.find_intermediate_colors(color1.hex, color2.hex, colors=num_colors, ignore_edges=True)
-        clrobjlist = [Color(hexv, name=names[count]) for hexv, count in enumerate(clrlist)]
+        clrlist = cutils.find_intermediate_colors(color1.hex, color2.hex, colors=num_colors, ignore_edges=True)
+        clrobjlist = [Color(hexv, name=names[count]) for count, hexv in enumerate(clrlist)]
         for c in clrobjlist:
             self.colors.append(c)
         self.show(color_list=clrobjlist)
 
     
-    def assign_palette(self, palette_name):
+    def assign_palette(self, palette_name: str) -> None:
         """
         Assign a palatte to the class
 
@@ -162,10 +163,10 @@ class Palette():
                 setattr(self, clrs["names"][i], c)
                 clist.append(c)
             self.colors = clist
-        except:
-            raise KeyError("Palette %s not found!"%palette_name)
+        except KeyError:
+            raise KeyError(f"Palette '{palette_name}' not found!")
 
-    def random_palette(self, type=None):
+    def random_palette(self, palette_type: str | None = None) -> None:
         """
         Assign a random palette
 
@@ -177,7 +178,7 @@ class Palette():
         -------
         None
         """
-        if type is None:
+        if palette_type is None:
             keys = colorlist.color_palettes.keys()
 
             #pick a random key
@@ -186,12 +187,18 @@ class Palette():
 
         else:
             #if a type is provided, pick a random palette that satisfies the type
-            filtered_list = [ key for key in colorlist.color_palettes.keys() if colorlist.color_palettes[key]['type'] == type]
+            filtered_list = [key for key in colorlist.color_palettes.keys() if colorlist.color_palettes[key]['type'] == palette_type]
             random_plt = random.choice(filtered_list)
             self.assign_palette(random_plt)
 
 
-    def show(self, color_list=None, minimal=True, title=None, scale=0.5):
+    def show(
+        self,
+        color_list: list[Color] | None = None,
+        minimal: bool = True,
+        title: str | None = None,
+        scale: float = 0.5,
+    ) -> None:
         """
         Wrap around inherited plot function
         """

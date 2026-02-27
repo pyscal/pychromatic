@@ -1,7 +1,6 @@
 """
 Module containing color palettes
 """
-import pychromatic.colorclass as pcl
 
 #default colors
 red = '#d32f2f'
@@ -40,9 +39,8 @@ color_palettes = {
 	'basics' : {'colors':['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00',
 						  '#ffff33','#a65628','#f781bf','#999999'],
 	          'names':['color1', 'color2', 'color3', 'color4', 'color5', 'color6', 'color7',
-	          'color8'],
+	          'color8', 'color9'],
 				'type':'', },
-
 
 	'set1_dark' : {'colors':['#1b9e77','#d95f02','#7570b3','#e7298a','#66a61e',
 							 '#e6ab02', '#a6761d','#666666'],
@@ -120,6 +118,36 @@ color_palettes = {
 			"dblue", "dgrey", "pred", "pyellow", "pgreen", "pblue", "pgrey",],
 			'type':'',},
 
+	# ── Colorblind-friendly palettes ──────────────────────────────────
+
+	'okabe_ito' : {'colors': [
+					'#E69F00', '#56B4E9', '#009E73', '#F0E442',
+					'#0072B2', '#D55E00', '#CC79A7', '#000000'],
+				'names': ['orange', 'sky', 'green', 'yellow',
+						  'blue', 'vermilion', 'purple', 'black'],
+				'type': 'qualitative'},
+
+	'tableau10' : {'colors': [
+					'#4E79A7', '#F28E2B', '#E15759', '#76B7B2', '#59A14F',
+					'#EDC948', '#B07AA1', '#FF9DA7', '#9C755F', '#BAB0AC'],
+				'names': ['blue', 'orange', 'red', 'teal', 'green',
+						  'yellow', 'purple', 'pink', 'brown', 'grey'],
+				'type': 'qualitative'},
+
+	'tol_bright' : {'colors': [
+					'#4477AA', '#EE6677', '#228833',
+					'#CCBB44', '#66CCEE', '#AA3377', '#BBBBBB'],
+				'names': ['blue', 'pink', 'green',
+						  'yellow', 'cyan', 'purple', 'grey'],
+				'type': 'qualitative'},
+
+	'tol_muted' : {'colors': [
+					'#332288', '#88CCEE', '#44AA99', '#117733', '#999933',
+					'#DDCC77', '#CC6677', '#882255', '#AA4499'],
+				'names': ['indigo', 'sky', 'teal', 'green', 'olive',
+						  'sand', 'rose', 'wine', 'violet'],
+				'type': 'qualitative'},
+
 }
 
 deprecated = {
@@ -180,6 +208,54 @@ chromate = {
         "blue" : "#66cfff",
         "grey" : "#b3b3b3",
 	}
+}
+
+# ── Colorblind-friendly standalone dicts (importable) ──────────────
+
+okabe_ito = {
+    "orange":    "#E69F00",
+    "sky":       "#56B4E9",
+    "green":     "#009E73",
+    "yellow":    "#F0E442",
+    "blue":      "#0072B2",
+    "vermilion": "#D55E00",
+    "purple":    "#CC79A7",
+    "black":     "#000000",
+}
+
+tableau10 = {
+    "blue":   "#4E79A7",
+    "orange": "#F28E2B",
+    "red":    "#E15759",
+    "teal":   "#76B7B2",
+    "green":  "#59A14F",
+    "yellow": "#EDC948",
+    "purple": "#B07AA1",
+    "pink":   "#FF9DA7",
+    "brown":  "#9C755F",
+    "grey":   "#BAB0AC",
+}
+
+tol_bright = {
+    "blue":   "#4477AA",
+    "pink":   "#EE6677",
+    "green":  "#228833",
+    "yellow": "#CCBB44",
+    "cyan":   "#66CCEE",
+    "purple": "#AA3377",
+    "grey":   "#BBBBBB",
+}
+
+tol_muted = {
+    "indigo": "#332288",
+    "sky":    "#88CCEE",
+    "teal":   "#44AA99",
+    "green":  "#117733",
+    "olive":  "#999933",
+    "sand":   "#DDCC77",
+    "rose":   "#CC6677",
+    "wine":   "#882255",
+    "violet": "#AA4499",
 }
 
 

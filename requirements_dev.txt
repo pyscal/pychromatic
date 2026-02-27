@@ -1,13 +1,5 @@
-pip==23.3
-bump2version==0.5.11
-wheel==0.38.1
-watchdog==0.9.0
-flake8==3.7.8
-tox==3.14.0
-coverage==4.5.4
-Sphinx==1.8.5
-twine==1.14.0
-pytest-cov==2.6.1
-pytest==4.6.5
-pytest-runner==5.1
-rich
+# Development dependencies are now managed in pyproject.toml [project.optional-dependencies.dev]
+# Install with: pip install -e ".[dev]"
+#
+# This file is kept for backward compatibility with tools that expect it.
+-e ".[dev]"

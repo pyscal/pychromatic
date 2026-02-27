@@ -1,28 +1,33 @@
+"""
+Decorators for auto-styling matplotlib plots.
+"""
+from __future__ import annotations
 
-import matplotlib.pyplot as plt
+from collections.abc import Callable
+from typing import Any
+
 from cycler import cycler
-import pychromatic.colors as pc
-import matplotlib.colors as mc
-from pychromatic.palette import Palette
-import matplotlib.gridspec as gridspec
+
 import pychromatic.colors as colorlist
 
 
-def chromatify(add_subplot): 
-    def modify_plot(*args, **kwargs): 
-        '''
-        Function to modify plot
-        '''
+def chromatify(add_subplot: Callable) -> Callable:
+    """
+    Decorator that auto-applies opinionated matplotlib styling to subplot functions.
+
+    The decorated function should return a matplotlib Axes object.
+    """
+
+    def modify_plot(*args: Any, **kwargs: Any) -> Any:
+        """Apply chromatify styling to the subplot."""
         #Process def args
         
         labelsize = kwargs.get('labelsize',  12)
         color = kwargs.get('color',  "#37474F")
-        colors = kwargs.get('color',  colorlist.color_palettes['set6']['colors'])
+        colors = kwargs.get('colors',  colorlist.color_palettes['set6']['colors'])
         xlabel = kwargs.get('xlabel',  'ax.set_xlabel()')
         ylabel = kwargs.get('ylabel',  'ax.set_ylabel()')
         labelfont = kwargs.get('labelfont',  12)
-
-        print("this went through decor")
 
         #Params and splines
         ax = add_subplot(*args, **kwargs)

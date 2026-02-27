@@ -4,6 +4,14 @@ pychromatic package
 Submodules
 ----------
 
+pychromatic.colorclass module
+-----------------------------
+
+.. automodule:: pychromatic.colorclass
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pychromatic.colors module
 -------------------------
 
@@ -20,10 +28,26 @@ pychromatic.cutils module
    :undoc-members:
    :show-inheritance:
 
+pychromatic.decors module
+-------------------------
+
+.. automodule:: pychromatic.decors
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pychromatic.palette module
 --------------------------
 
 .. automodule:: pychromatic.palette
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pychromatic.plutils module
+--------------------------
+
+.. automodule:: pychromatic.plutils
    :members:
    :undoc-members:
    :show-inheritance:

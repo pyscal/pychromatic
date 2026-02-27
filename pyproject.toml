@@ -1,0 +1,95 @@
+[build-system]
+requires = ["setuptools>=68.0", "setuptools-scm>=8.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pychromatic"
+version = "0.6.0"
+description = "A pretty color palette manager and matplotlib plotting utility for Python"
+readme = "README.rst"
+license = {text = "GPL-3.0-only"}
+requires-python = ">=3.10"
+authors = [
+    { name = "Sarath Menon", email = "sarathmenon@mailbox.org" },
+    { name = "Abril Azocar Guzman" },
+]
+keywords = ["color", "palette", "matplotlib", "visualization", "plotting"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+dependencies = [
+    "matplotlib",
+    "numpy",
+    "rich",
+    "cycler",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7",
+    "pytest-cov>=4",
+    "ruff>=0.4",
+    "sphinx>=7",
+    "sphinx-rtd-theme",
+    "bump2version",
+]
+
+[project.urls]
+Homepage = "https://github.com/pyscal/pychromatic"
+Repository = "https://github.com/pyscal/pychromatic"
+Documentation = "https://pychromatic.readthedocs.io"
+"Bug Tracker" = "https://github.com/pyscal/pychromatic/issues"
+
+[tool.setuptools.packages.find]
+include = ["pychromatic*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "SIM",  # flake8-simplify
+]
+ignore = [
+    "E501",   # line too long (handled by formatter)
+    "B006",   # mutable default argument
+    "SIM108", # ternary operator
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["pychromatic"]
+
+[tool.bumpversion]
+current_version = "0.6.0"
+commit = true
+tag = true
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = 'version = "{current_version}"'
+replace = 'version = "{new_version}"'
+
+[[tool.bumpversion.files]]
+filename = "pychromatic/__init__.py"
+search = '__version__ = "{current_version}"'
+replace = '__version__ = "{new_version}"'

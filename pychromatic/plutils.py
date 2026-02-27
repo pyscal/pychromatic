@@ -1,11 +1,9 @@
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 import numpy as np
-import matplotlib.colors as mc
 from pychromatic.palette import Palette
 from cycler import cycler
 import pychromatic.colors as pc
-from copy import copy
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
 class PlotTemplate(Palette):
@@ -64,7 +62,6 @@ class Multiplot(PlotTemplate):
         self.palette = kwargs.get('palette', 'default')
         #number of plots
         self.columns = kwargs.get('columns',1)
-        self.rows = kwargs.get('rows',1)
         self.rows = kwargs.get('rows',1)
         self.wratios = kwargs.get('width_ratios', [1 for x in range(self.columns)])
         self.hratios = kwargs.get('height_ratios', [1 for x in range(self.rows)])
@@ -405,9 +402,9 @@ class Multiplot(PlotTemplate):
         """
         labelsize = kwargs.get('labelsize',  12)
         color = kwargs.get('color',  "#37474F")
-        colors = kwargs.get('color',  pc.color_palettes['set6']['colors'])
-        xlabel = kwargs.get('xlabel',  'mlt[%d,%d].set_xlabel()'%(index[0], index[1]))
-        ylabel = kwargs.get('ylabel',  'mlt[%d,%d].set_ylabel()'%(index[0], index[1]))
+        colors = kwargs.get('colors',  pc.color_palettes['set6']['colors'])
+        xlabel = kwargs.get('xlabel',  f'mlt[{index[0]},{index[1]}].set_xlabel()')
+        ylabel = kwargs.get('ylabel',  f'mlt[{index[0]},{index[1]}].set_ylabel()')
         labelfont = kwargs.get('labelfont',  12)
 
         self.axes[index[0], index[1]].tick_params(which='major', length=0, width=1, 
