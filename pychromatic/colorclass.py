@@ -1,10 +1,12 @@
 """
 Color class for representing and manipulating individual colors.
 """
+
 from __future__ import annotations
 
-import pychromatic.cutils as cutils
 from rich.console import Console
+
+import pychromatic.cutils as cutils
 
 
 class Color:
@@ -73,9 +75,7 @@ class Color:
             self.name = f"dark-{self.name.split('-')[-1]}"
         self.update()
 
-    def show(
-        self, minimal: bool = True, title: str | None = None, scale: float = 0.5
-    ) -> None:
+    def show(self, minimal: bool = True, title: str | None = None, scale: float = 0.5) -> None:
         """Display a color swatch plot."""
         cutils.plot_colors([self.colorstr], minimal=minimal, title=title, scale=scale)
 
@@ -85,10 +85,3 @@ class Color:
         if (self.name is not None) and (colorobj.name is not None):
             self.name = f"{self.name.split('-')[-1]}-{colorobj.name}"
         self.update()
-
-
-
-
-
-
-

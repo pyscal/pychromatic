@@ -1,10 +1,12 @@
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 import numpy as np
-from pychromatic.palette import Palette
 from cycler import cycler
-import pychromatic.colors as pc
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+
+import pychromatic.colors as pc
+from pychromatic.palette import Palette
+
 
 class PlotTemplate(Palette):
     def set_size(self):
@@ -29,7 +31,7 @@ class PlotTemplate(Palette):
         inches_per_pt = 1 / 72.27
 
         # Golden ratio to set aesthetic figure height
-        #golden_ratio = (5**.5 - 1) / 2
+        # golden_ratio = (5**.5 - 1) / 2
 
         # Figure width in inches/home/users/menonsqr/Documents/BCC-Mo/EAM_Zhou
         fig_width_in = fig_width_pt * inches_per_pt
@@ -43,40 +45,55 @@ class PlotTemplate(Palette):
     def show(self):
         return self.fig
 
-                    
+
 class Multiplot(PlotTemplate):
     """
     A class to easily create multiplots and return the objects for further modification
     """
+
     def __init__(self, width=510, **kwargs):
         """
-        Add things
+        Create a multiplot grid.
+
+        Parameters
+        ----------
+        width : int
+            Figure width in points (default 510).
+        **kwargs
+            fraction, ratio : float
+                Figure sizing parameters.
+            palette : str
+                Palette name (default 'default').
+            columns, rows : int
+                Grid dimensions.
+            width_ratios, height_ratios : list[int]
+                Relative sizes of columns/rows.
+            wspace, hspace : float | None
+                GridSpec spacing.
+            gridspec_kwargs : dict | None
+                Extra keyword arguments forwarded to ``GridSpec``
+                (e.g. ``left``, ``right``, ``top``, ``bottom``).
         """
-        #asssign a palette, things can be changed later
         self.width = width
-        #plot dimensions
-        self.fraction = kwargs.get('fraction',1)
-        self.ratio = kwargs.get('ratio', ((5**.5 - 1) / 2.0))
-        #palette specs
-        #self.palette = Palette(palette=kwargs.get('palette', 'default'))
-        self.palette = kwargs.get('palette', 'default')
-        #number of plots
-        self.columns = kwargs.get('columns',1)
-        self.rows = kwargs.get('rows',1)
-        self.wratios = kwargs.get('width_ratios', [1 for x in range(self.columns)])
-        self.hratios = kwargs.get('height_ratios', [1 for x in range(self.rows)])
-        self.wspace = kwargs.get('wspace', None)
-        self.hspace = kwargs.get('hspace', None)
+        self.fraction = kwargs.get("fraction", 1)
+        self.ratio = kwargs.get("ratio", ((5**0.5 - 1) / 2.0))
+        self.palette = kwargs.get("palette", "default")
+        self.columns = kwargs.get("columns", 1)
+        self.rows = kwargs.get("rows", 1)
+        self.wratios = kwargs.get("width_ratios", [1 for x in range(self.columns)])
+        self.hratios = kwargs.get("height_ratios", [1 for x in range(self.rows)])
+        self.wspace = kwargs.get("wspace")
+        self.hspace = kwargs.get("hspace")
+        self.gridspec_kwargs = kwargs.get("gridspec_kwargs", {})
         self.colors = pc.chromate["dark"]
         self.tables = []
         self.make_plot()
-                
 
     def __getitem__(self, ax):
         """
         Access method
         """
-        #print(type(ax))
+        # print(type(ax))
         if not isinstance(ax, tuple):
             raise IndexError("at least length two required")
 
@@ -91,12 +108,20 @@ class Multiplot(PlotTemplate):
         Make plot of the required dimensions using GridSpec
         """
         self.fig = plt.figure(figsize=self.set_size(), edgecolor=pc.darkgrey)
-        self.spec = gridspec.GridSpec(ncols=self.columns, nrows=self.rows, figure=self.fig,
-            wspace=self.wspace, hspace=self.hspace, width_ratios=self.wratios, height_ratios=self.hratios)
+        self.spec = gridspec.GridSpec(
+            ncols=self.columns,
+            nrows=self.rows,
+            figure=self.fig,
+            wspace=self.wspace,
+            hspace=self.hspace,
+            width_ratios=self.wratios,
+            height_ratios=self.hratios,
+            **self.gridspec_kwargs,
+        )
         self.axes = []
         self.subaxes = []
-        custom_cycler = (cycler(color=self.colors))
-        #now create a set of axes
+        custom_cycler = cycler(color=self.colors)
+        # now create a set of axes
         for i in range(self.rows):
             axdummy = []
             saxdummy = []
@@ -104,25 +129,40 @@ class Multiplot(PlotTemplate):
                 ax = self.fig.add_subplot(self.spec[i, j])
                 ax.set_prop_cycle(custom_cycler)
 
-                #set ticks
-                ax.tick_params(which='major', length=4, width=1, 
-                          direction='in', bottom=True, top=False, 
-                          right=False, color=pc.accent["dgrey"])
+                # set ticks
+                ax.tick_params(
+                    which="major",
+                    length=4,
+                    width=1,
+                    direction="in",
+                    bottom=True,
+                    top=False,
+                    right=False,
+                    color=pc.accent["dgrey"],
+                )
 
                 axdummy.append(ax)
                 saxdummy.append([])
             self.axes.append(np.array(axdummy))
             self.subaxes.append(saxdummy)
         self.axes = np.array(self.axes)
-        #self.subaxes = np.array(self.subaxes)
+        # self.subaxes = np.array(self.subaxes)
 
-
-    def add_subplot(self, index, rows=1, columns=1, hide_axes=True, wspace=None, hspace=None,
-        width_ratios=None, height_ratios=None):
+    def add_subplot(
+        self,
+        index,
+        rows=1,
+        columns=1,
+        hide_axes=True,
+        wspace=None,
+        hspace=None,
+        width_ratios=None,
+        height_ratios=None,
+    ):
         """
         make subplots
         """
-        custom_cycler = (cycler(color=self.colors))
+        custom_cycler = cycler(color=self.colors)
 
         if len(index) != 2:
             raise TypeError("Index should be of length 2")
@@ -136,47 +176,61 @@ class Multiplot(PlotTemplate):
         if height_ratios is None:
             height_ratios = [1 for x in range(rows)]
 
-        gs = gridspec.GridSpecFromSubplotSpec(rows, columns, subplot_spec=self.spec[index[0], index[1]],
-            hspace=hspace, wspace=wspace, width_ratios=width_ratios, height_ratios=height_ratios)
+        gs = gridspec.GridSpecFromSubplotSpec(
+            rows,
+            columns,
+            subplot_spec=self.spec[index[0], index[1]],
+            hspace=hspace,
+            wspace=wspace,
+            width_ratios=width_ratios,
+            height_ratios=height_ratios,
+        )
         for r in range(rows):
             for c in range(columns):
                 ax = self.fig.add_subplot(gs[r, c])
                 ax.set_prop_cycle(custom_cycler)
-                #set ticks
-                ax.tick_params(which='major', length=4, width=1, 
-                          direction='in', bottom=True, top=False, 
-                          right=False, color=pc.accent["dgrey"])
+                # set ticks
+                ax.tick_params(
+                    which="major",
+                    length=4,
+                    width=1,
+                    direction="in",
+                    bottom=True,
+                    top=False,
+                    right=False,
+                    color=pc.accent["dgrey"],
+                )
 
                 self.subaxes[index[0]][index[1]].append(ax)
 
         if hide_axes:
             self.turn_off_axes(index)
 
-    #now turn off main axes
+    # now turn off main axes
     def turn_off_axes(self, index):
         """
         Turn off axes
         """
         if len(index) == 2:
-            self.axes[index[0], index[1]].spines['right'].set_visible(False)
-            self.axes[index[0], index[1]].spines['left'].set_visible(False)
-            self.axes[index[0], index[1]].spines['top'].set_visible(False)
-            self.axes[index[0], index[1]].spines['bottom'].set_visible(False)
+            self.axes[index[0], index[1]].spines["right"].set_visible(False)
+            self.axes[index[0], index[1]].spines["left"].set_visible(False)
+            self.axes[index[0], index[1]].spines["top"].set_visible(False)
+            self.axes[index[0], index[1]].spines["bottom"].set_visible(False)
             self.axes[index[0], index[1]].set_xticklabels([])
             self.axes[index[0], index[1]].set_yticklabels([])
-            self.axes[index[0], index[1]].xaxis.set_ticks_position('none')
-            self.axes[index[0], index[1]].yaxis.set_ticks_position('none')
+            self.axes[index[0], index[1]].xaxis.set_ticks_position("none")
+            self.axes[index[0], index[1]].yaxis.set_ticks_position("none")
             self.axes[index[0], index[1]].set_ylabel(" ")
             self.axes[index[0], index[1]].set_xlabel(" ")
         elif len(index) == 3:
-            self.subaxes[index[0]][index[1]][index[2]].spines['right'].set_visible(False)
-            self.subaxes[index[0]][index[1]][index[2]].spines['left'].set_visible(False)
-            self.subaxes[index[0]][index[1]][index[2]].spines['top'].set_visible(False)
-            self.subaxes[index[0]][index[1]][index[2]].spines['bottom'].set_visible(False)
+            self.subaxes[index[0]][index[1]][index[2]].spines["right"].set_visible(False)
+            self.subaxes[index[0]][index[1]][index[2]].spines["left"].set_visible(False)
+            self.subaxes[index[0]][index[1]][index[2]].spines["top"].set_visible(False)
+            self.subaxes[index[0]][index[1]][index[2]].spines["bottom"].set_visible(False)
             self.subaxes[index[0]][index[1]][index[2]].set_xticklabels([])
             self.subaxes[index[0]][index[1]][index[2]].set_yticklabels([])
-            self.subaxes[index[0]][index[1]][index[2]].xaxis.set_ticks_position('none')
-            self.subaxes[index[0]][index[1]][index[2]].yaxis.set_ticks_position('none')
+            self.subaxes[index[0]][index[1]][index[2]].xaxis.set_ticks_position("none")
+            self.subaxes[index[0]][index[1]][index[2]].yaxis.set_ticks_position("none")
             self.subaxes[index[0]][index[1]][index[2]].set_ylabel(" ")
             self.subaxes[index[0]][index[1]][index[2]].set_xlabel(" ")
         else:
@@ -186,7 +240,7 @@ class Multiplot(PlotTemplate):
         """
         Add a broken axes plot
         """
-        #first check if it is a gridspec or a subplot
+        # first check if it is a gridspec or a subplot
         if len(index) != 2:
             raise TypeError("Index should be of length 2")
         if index[0] >= self.rows:
@@ -194,10 +248,9 @@ class Multiplot(PlotTemplate):
         if index[1] >= self.columns:
             raise ValueError("index should be less than set columns")
 
-
-        if len(x)==4:
-            seg1 = x[1]-x[0]
-            seg2 = x[3]-x[2]
+        if len(x) == 4:
+            seg1 = x[1] - x[0]
+            seg2 = x[3] - x[2]
             xlo1 = x[0]
             xlo2 = x[2]
             xhi1 = x[1]
@@ -206,50 +259,89 @@ class Multiplot(PlotTemplate):
             yhi = y[1]
             widths = [seg1, seg2]
 
-            gs = gridspec.GridSpecFromSubplotSpec(1, 2, subplot_spec=self.spec[index[0], index[1]],
-                hspace=hspace, wspace=wspace, width_ratios=widths)
-            
+            gs = gridspec.GridSpecFromSubplotSpec(
+                1,
+                2,
+                subplot_spec=self.spec[index[0], index[1]],
+                hspace=hspace,
+                wspace=wspace,
+                width_ratios=widths,
+            )
+
             ax2a = self.fig.add_subplot(gs[0, 0])
             ax2b = self.fig.add_subplot(gs[0, 1], sharey=ax2a)
-            
+
             ax2a.set_xlim(xlo1, xhi1)
             ax2b.set_xlim(xlo2, xhi2)
             ax2a.set_ylim(ylo, yhi)
             ax2b.set_ylim(ylo, yhi)
 
-            norm1 = (widths[0]/sum(widths))
-            norm2 = (widths[1]/sum(widths))
+            norm1 = widths[0] / sum(widths)
+            norm2 = widths[1] / sum(widths)
 
-            #ax2m.tick_params(which='major', length=3, width=1, direction='in', 
-            #                 bottom=False, top=False, right=False, left=False, 
-            #                 labelbottom=False, labelleft=False, 
+            # ax2m.tick_params(which='major', length=3, width=1, direction='in',
+            #                 bottom=False, top=False, right=False, left=False,
+            #                 labelbottom=False, labelleft=False,
             #                 color=pc.accent["dgrey"],zorder=1000)
 
-            ax2a.tick_params(which='major', length=3, width=1, direction='in', 
-                             bottom=True, top=False, right=False, color=pc.accent["dgrey"])
-            ax2b.tick_params(which='major', length=3, width=1, direction='in', 
-                             bottom=True, top=False, right=False, left=False, 
-                             labelleft=False, color=pc.accent["dgrey"])    
+            ax2a.tick_params(
+                which="major",
+                length=3,
+                width=1,
+                direction="in",
+                bottom=True,
+                top=False,
+                right=False,
+                color=pc.accent["dgrey"],
+            )
+            ax2b.tick_params(
+                which="major",
+                length=3,
+                width=1,
+                direction="in",
+                bottom=True,
+                top=False,
+                right=False,
+                left=False,
+                labelleft=False,
+                color=pc.accent["dgrey"],
+            )
 
-            #ax2m.spines['right'].set_visible(False)
-            #ax2m.spines['left'].set_visible(False)
-            #ax2m.spines['top'].set_visible(False)
-            #ax2m.spines['bottom'].set_visible(False)
-            ax2a.spines['right'].set_visible(False)
-            ax2b.spines['left'].set_visible(False)
+            # ax2m.spines['right'].set_visible(False)
+            # ax2m.spines['left'].set_visible(False)
+            # ax2m.spines['top'].set_visible(False)
+            # ax2m.spines['bottom'].set_visible(False)
+            ax2a.spines["right"].set_visible(False)
+            ax2b.spines["left"].set_visible(False)
             ax2a.set_xticklabels([])
             ax2b.set_xticklabels([])
             ax2a.set_yticklabels([])
             ax2b.set_yticklabels([])
 
-            ax2a.plot([xhi1-tilt*norm1, xhi1+tilt*norm1], [ylo-d/2, ylo+d/2], color=pc.accent["dgrey"])[0].set_clip_on(False)
-            ax2a.plot([xhi1-tilt*norm1, xhi1+tilt*norm1], [yhi-d/2, yhi+d/2], color=pc.accent["dgrey"])[0].set_clip_on(False)
-            ax2b.plot([xlo2-tilt*norm2, xlo2+tilt*norm2], [ylo-d/2, ylo+d/2], color=pc.accent["dgrey"])[0].set_clip_on(False)
-            ax2b.plot([xlo2-tilt*norm2, xlo2+tilt*norm2], [yhi-d/2, yhi+d/2], color=pc.accent["dgrey"])[0].set_clip_on(False)
+            ax2a.plot(
+                [xhi1 - tilt * norm1, xhi1 + tilt * norm1],
+                [ylo - d / 2, ylo + d / 2],
+                color=pc.accent["dgrey"],
+            )[0].set_clip_on(False)
+            ax2a.plot(
+                [xhi1 - tilt * norm1, xhi1 + tilt * norm1],
+                [yhi - d / 2, yhi + d / 2],
+                color=pc.accent["dgrey"],
+            )[0].set_clip_on(False)
+            ax2b.plot(
+                [xlo2 - tilt * norm2, xlo2 + tilt * norm2],
+                [ylo - d / 2, ylo + d / 2],
+                color=pc.accent["dgrey"],
+            )[0].set_clip_on(False)
+            ax2b.plot(
+                [xlo2 - tilt * norm2, xlo2 + tilt * norm2],
+                [yhi - d / 2, yhi + d / 2],
+                color=pc.accent["dgrey"],
+            )[0].set_clip_on(False)
 
-        elif len(self.y)==4:
-            seg1 = y[1]-y[0]
-            seg2 = y[3]-y[2]
+        elif len(y) == 4:
+            seg1 = y[1] - y[0]
+            seg2 = y[3] - y[2]
             ylo1 = y[0]
             ylo2 = y[2]
             yhi1 = y[1]
@@ -258,9 +350,15 @@ class Multiplot(PlotTemplate):
             xhi = x[1]
             widths = [seg1, seg2]
 
-            gs = gridspec.GridSpecFromSubplotSpec(2, 1, subplot_spec=self.spec[index[0], index[1]],
-                hspace=hspace, wspace=wspace, width_ratios=widths)
-            
+            gs = gridspec.GridSpecFromSubplotSpec(
+                2,
+                1,
+                subplot_spec=self.spec[index[0], index[1]],
+                hspace=hspace,
+                wspace=wspace,
+                width_ratios=widths,
+            )
+
             ax2a = self.fig.add_subplot(gs[0, 0])
             ax2b = self.fig.add_subplot(gs[1, 0], sharex=ax2a)
 
@@ -268,45 +366,78 @@ class Multiplot(PlotTemplate):
             ax2b.set_ylim(ylo2, yhi2)
             ax2a.set_xlim(xlo, xhi)
             ax2b.set_xlim(xlo, xhi)
-            #ax2m.set_xlim(xlo, xhi)
+            # ax2m.set_xlim(xlo, xhi)
 
-            norm1 = (widths[0]/sum(widths))
-            norm2 = (widths[1]/sum(widths))
+            norm1 = widths[0] / sum(widths)
+            norm2 = widths[1] / sum(widths)
 
-            #ax2m.tick_params(which='major', length=3, width=1, direction='in', 
-            #                 bottom=False, top=False, right=False, left=False, 
-            #                 labelbottom=False, labelleft=False, 
+            # ax2m.tick_params(which='major', length=3, width=1, direction='in',
+            #                 bottom=False, top=False, right=False, left=False,
+            #                 labelbottom=False, labelleft=False,
             #                 color=pc.accent["dgrey"],zorder=1000)
 
-            ax2a.tick_params(which='major', length=3, width=1, direction='in', 
-                             bottom=True, top=False, right=False, labeltop=False, color=pc.accent["dgrey"])
-            ax2b.tick_params(which='major', length=3, width=1, direction='in', 
-                             bottom=False, top=True, right=False, left=True, 
-                             labelbottom=False, color=pc.accent["dgrey"])    
+            ax2a.tick_params(
+                which="major",
+                length=3,
+                width=1,
+                direction="in",
+                bottom=True,
+                top=False,
+                right=False,
+                labeltop=False,
+                color=pc.accent["dgrey"],
+            )
+            ax2b.tick_params(
+                which="major",
+                length=3,
+                width=1,
+                direction="in",
+                bottom=False,
+                top=True,
+                right=False,
+                left=True,
+                labelbottom=False,
+                color=pc.accent["dgrey"],
+            )
 
-            #ax2m.spines['right'].set_visible(False)
-            #ax2m.spines['left'].set_visible(False)
-            #ax2m.spines['top'].set_visible(False)
-            #ax2m.spines['bottom'].set_visible(False)
-            ax2a.spines['top'].set_visible(False)
-            ax2b.spines['bottom'].set_visible(False)
+            # ax2m.spines['right'].set_visible(False)
+            # ax2m.spines['left'].set_visible(False)
+            # ax2m.spines['top'].set_visible(False)
+            # ax2m.spines['bottom'].set_visible(False)
+            ax2a.spines["top"].set_visible(False)
+            ax2b.spines["bottom"].set_visible(False)
             ax2a.set_xticklabels([])
             ax2b.set_xticklabels([])
             ax2a.set_yticklabels([])
             ax2b.set_yticklabels([])
 
+            ax2a.plot(
+                [xlo - d / 2, xlo + d / 2],
+                [yhi1 - tilt * norm1, yhi1 + tilt * norm1],
+                color=pc.accent["dgrey"],
+            )[0].set_clip_on(False)
+            ax2a.plot(
+                [xhi - d / 2, xhi + d / 2],
+                [yhi1 - tilt * norm1, yhi1 + tilt * norm1],
+                color=pc.accent["dgrey"],
+            )[0].set_clip_on(False)
+            ax2b.plot(
+                [xlo - d / 2, xlo + d / 2],
+                [ylo2 - tilt * norm2, ylo2 + tilt * norm2],
+                color=pc.accent["dgrey"],
+            )[0].set_clip_on(False)
+            ax2b.plot(
+                [xhi - d / 2, xhi + d / 2],
+                [ylo2 - tilt * norm2, ylo2 + tilt * norm2],
+                color=pc.accent["dgrey"],
+            )[0].set_clip_on(False)
 
-            ax2a.plot([xlo-d/2, xlo+d/2], [yhi1-tilt*norm1, yhi1+tilt*norm1],  color=pc.accent["dgrey"])[0].set_clip_on(False)
-            ax2a.plot([xhi-d/2, xhi+d/2], [yhi1-tilt*norm1, yhi1+tilt*norm1], color=pc.accent["dgrey"])[0].set_clip_on(False)
-            ax2b.plot([xlo-d/2, xlo+d/2], [ylo2-tilt*norm2, ylo2+tilt*norm2], color=pc.accent["dgrey"])[0].set_clip_on(False)
-            ax2b.plot([xhi-d/2, xhi+d/2], [ylo2-tilt*norm2, ylo2+tilt*norm2], color=pc.accent["dgrey"])[0].set_clip_on(False)
-
-        custom_cycler = (cycler(color=self.colors))
-        #ax2m.set_prop_cycle(custom_cycler)
+        custom_cycler = cycler(color=self.colors)
+        # ax2m.set_prop_cycle(custom_cycler)
         ax2a.set_prop_cycle(custom_cycler)
         ax2b.set_prop_cycle(custom_cycler)
 
-        #self.subaxes[index[0]][index[1]].append(ax2m)
+        # self.subaxes[index[0]][index[1]].append(ax2m)
         self.subaxes[index[0]][index[1]].append(ax2a)
         self.subaxes[index[0]][index[1]].append(ax2b)
 
@@ -323,19 +454,31 @@ class Multiplot(PlotTemplate):
         if index[1] >= self.columns:
             raise ValueError("index should be less than set columns")
 
-        ax = inset_axes(self.axes[index[0], index[1]], width=width, 
-            height=height, loc=loc, borderpad=borderpad)
+        ax = inset_axes(
+            self.axes[index[0], index[1]], width=width, height=height, loc=loc, borderpad=borderpad
+        )
 
-        custom_cycler = (cycler(color=self.colors))
+        custom_cycler = cycler(color=self.colors)
         ax.set_prop_cycle(custom_cycler)
         self.subaxes[index[0]][index[1]].append(ax)
 
-
-
-    def add_table(self, index, columnlist, header=None, fmt=None,
-        fontsize=14, scale=(2,2), loc="center", edgecolor=None, 
-        bold=True, headercolor=None, textcolor=None, headertextcolor=None, 
-        cellcolor=None, **kwargs):
+    def add_table(
+        self,
+        index,
+        columnlist,
+        header=None,
+        fmt=None,
+        fontsize=14,
+        scale=(2, 2),
+        loc="center",
+        edgecolor=None,
+        bold=True,
+        headercolor=None,
+        textcolor=None,
+        headertextcolor=None,
+        cellcolor=None,
+        **kwargs,
+    ):
         """
         Add table to the plot
         """
@@ -349,7 +492,6 @@ class Multiplot(PlotTemplate):
             textcolor = "black"
         if headertextcolor is None:
             headertextcolor = "black"
-
 
         if header is not None:
             if len(columnlist) != len(header):
@@ -367,18 +509,20 @@ class Multiplot(PlotTemplate):
         for i in range(len(columnlist)):
             temp = []
             for j in range(len(columnlist[i])):
-                temp.append(fmt[i]%columnlist[i][j])
+                temp.append(fmt[i] % columnlist[i][j])
             newdata.append(np.array(temp))
 
         self.axes[index[0], index[1]].xaxis.set_visible(False)
         self.axes[index[0], index[1]].yaxis.set_visible(False)
 
-        self.axes[index[0], index[1]].spines['right'].set_visible(False)
-        self.axes[index[0], index[1]].spines['top'].set_visible(False)
-        self.axes[index[0], index[1]].spines['left'].set_visible(False)
-        self.axes[index[0], index[1]].spines['bottom'].set_visible(False)
+        self.axes[index[0], index[1]].spines["right"].set_visible(False)
+        self.axes[index[0], index[1]].spines["top"].set_visible(False)
+        self.axes[index[0], index[1]].spines["left"].set_visible(False)
+        self.axes[index[0], index[1]].spines["bottom"].set_visible(False)
 
-        y = self.axes[index[0], index[1]].table(cellText=np.array(newdata).T,colLabels=header,loc=loc, **kwargs)
+        y = self.axes[index[0], index[1]].table(
+            cellText=np.array(newdata).T, colLabels=header, loc=loc, **kwargs
+        )
         y.set_fontsize(fontsize)
         y.scale(scale[0], scale[1])
 
@@ -386,7 +530,7 @@ class Multiplot(PlotTemplate):
             cell.set_edgecolor(edgecolor)
             if k[0] == 0:
                 if bold:
-                    cell.set_text_props(weight='bold', color=headertextcolor)
+                    cell.set_text_props(weight="bold", color=headertextcolor)
                 else:
                     cell.set_text_props(color=headertextcolor)
                 cell.set_facecolor(headercolor)
@@ -400,42 +544,110 @@ class Multiplot(PlotTemplate):
         """
         Chromatify the plot
         """
-        labelsize = kwargs.get('labelsize',  12)
-        color = kwargs.get('color',  "#37474F")
-        colors = kwargs.get('colors',  pc.color_palettes['set6']['colors'])
-        xlabel = kwargs.get('xlabel',  f'mlt[{index[0]},{index[1]}].set_xlabel()')
-        ylabel = kwargs.get('ylabel',  f'mlt[{index[0]},{index[1]}].set_ylabel()')
-        labelfont = kwargs.get('labelfont',  12)
+        labelsize = kwargs.get("labelsize", 12)
+        color = kwargs.get("color", "#37474F")
+        colors = kwargs.get("colors", pc.color_palettes["set6"]["colors"])
+        xlabel = kwargs.get("xlabel", f"mlt[{index[0]},{index[1]}].set_xlabel()")
+        ylabel = kwargs.get("ylabel", f"mlt[{index[0]},{index[1]}].set_ylabel()")
+        labelfont = kwargs.get("labelfont", 12)
 
-        self.axes[index[0], index[1]].tick_params(which='major', length=0, width=1, 
-                       direction='in', bottom=True, top=False, 
-                       right=False, color=color, 
-                       labelsize=labelsize)
+        self.axes[index[0], index[1]].tick_params(
+            which="major",
+            length=0,
+            width=1,
+            direction="in",
+            bottom=True,
+            top=False,
+            right=False,
+            color=color,
+            labelsize=labelsize,
+        )
 
-        self.axes[index[0], index[1]].spines['top'].set_visible(False)
-        self.axes[index[0], index[1]].spines['right'].set_visible(False)
-        self.axes[index[0], index[1]].spines['bottom'].set_color("#37474F")
-        self.axes[index[0], index[1]].spines['left'].set_color("#37474F")
-        
+        self.axes[index[0], index[1]].spines["top"].set_visible(False)
+        self.axes[index[0], index[1]].spines["right"].set_visible(False)
+        self.axes[index[0], index[1]].spines["bottom"].set_color("#37474F")
+        self.axes[index[0], index[1]].spines["left"].set_color("#37474F")
+
         self.axes[index[0], index[1]].xaxis.label.set_color("#37474F")
         self.axes[index[0], index[1]].yaxis.label.set_color("#37474F")
-        #Change custom plot colors
-        custom_cycler = (cycler(color=colors))
-        self.axes[index[0], index[1]].set_prop_cycle(custom_cycler)       
-        
-        #labels
+        # Change custom plot colors
+        custom_cycler = cycler(color=colors)
+        self.axes[index[0], index[1]].set_prop_cycle(custom_cycler)
+
+        # labels
         self.axes[index[0], index[1]].set_xlabel(xlabel, fontsize=labelfont)
-        self.axes[index[0], index[1]].set_ylabel(ylabel, fontsize=labelfont)       
+        self.axes[index[0], index[1]].set_ylabel(ylabel, fontsize=labelfont)
+
+    def style_axes(
+        self,
+        index,
+        xlabel=None,
+        ylabel=None,
+        title=None,
+        xlim=None,
+        ylim=None,
+        labelsize=12,
+        titlesize=14,
+        hide_spines=None,
+        tick_direction="in",
+        **tick_kwargs,
+    ):
+        """
+        Convenience method for common axis and tick modifications.
+
+        Parameters
+        ----------
+        index : tuple[int, int]
+            ``(row, col)`` of the subplot to style.
+        xlabel, ylabel, title : str | None
+            Axis labels and title.
+        xlim, ylim : tuple[float, float] | None
+            Axis limits.
+        labelsize : int
+            Font size for tick labels (default 12).
+        titlesize : int
+            Font size for the title (default 14).
+        hide_spines : list[str] | None
+            Spines to hide, e.g. ``['top', 'right']``.
+        tick_direction : str
+            ``'in'``, ``'out'``, or ``'inout'`` (default ``'in'``).
+        **tick_kwargs
+            Additional keyword arguments forwarded to ``ax.tick_params()``.
+        """
+        ax = self.axes[index[0], index[1]]
+
+        if xlabel is not None:
+            ax.set_xlabel(xlabel, fontsize=labelsize)
+        if ylabel is not None:
+            ax.set_ylabel(ylabel, fontsize=labelsize)
+        if title is not None:
+            ax.set_title(title, fontsize=titlesize)
+        if xlim is not None:
+            ax.set_xlim(*xlim)
+        if ylim is not None:
+            ax.set_ylim(*ylim)
+
+        if hide_spines is not None:
+            for spine in hide_spines:
+                ax.spines[spine].set_visible(False)
+
+        ax.tick_params(
+            direction=tick_direction,
+            labelsize=labelsize,
+            **tick_kwargs,
+        )
+
 
 class BrokenAxes(PlotTemplate):
     """
     Broken axes plot object
     """
+
     def __init__(self, x, y, width=510, fig=None, spec=None, specx=0, specy=0, **kwargs):
         """
         Add things
         """
-        #asssign a palette, things can be changed later
+        # asssign a palette, things can be changed later
         self.x = x
         self.y = y
         self.width = width
@@ -444,17 +656,17 @@ class BrokenAxes(PlotTemplate):
         self.specx = specx
         self.specy = specy
 
-        self.d = kwargs.get('d',0.06)
-        self.tilt = kwargs.get('tilt',0.01)
-        #plot dimensions
-        self.fraction = kwargs.get('fraction',1)
-        self.ratio = kwargs.get('ratio', ((5**.5 - 1) / 2.0))
-        #palette specs
-        #self.palette = Palette(palette=kwargs.get('palette', 'default'))
-        self.palette = kwargs.get('palette', 'default')
-        #number of plots
-        self.columns = kwargs.get('columns',1)
-        self.rows = kwargs.get('rows',1)
+        self.d = kwargs.get("d", 0.06)
+        self.tilt = kwargs.get("tilt", 0.01)
+        # plot dimensions
+        self.fraction = kwargs.get("fraction", 1)
+        self.ratio = kwargs.get("ratio", ((5**0.5 - 1) / 2.0))
+        # palette specs
+        # self.palette = Palette(palette=kwargs.get('palette', 'default'))
+        self.palette = kwargs.get("palette", "default")
+        # number of plots
+        self.columns = kwargs.get("columns", 1)
+        self.rows = kwargs.get("rows", 1)
 
         self.make_plot()
 
@@ -463,13 +675,13 @@ class BrokenAxes(PlotTemplate):
         self.axes = []
         if self.fig is None:
             self.fig = plt.figure(figsize=self.set_size(), edgecolor=pc.darkgrey)
-        
+
         if self.spec is None:
             self.spec = gridspec.GridSpec(ncols=1, nrows=1, wspace=0.2)
 
-        if len(self.x)==4:
-            seg1 = self.x[1]-self.x[0]
-            seg2 = self.x[3]-self.x[2]
+        if len(self.x) == 4:
+            seg1 = self.x[1] - self.x[0]
+            seg2 = self.x[3] - self.x[2]
             xlo1 = self.x[0]
             xlo2 = self.x[2]
             xhi1 = self.x[1]
@@ -477,7 +689,9 @@ class BrokenAxes(PlotTemplate):
             ylo = self.y[0]
             yhi = self.y[1]
             widths = [seg1, seg2]
-            ax = self.spec[self.specx, self.specy].subgridspec(1, 2, width_ratios=widths, wspace=0.2)
+            ax = self.spec[self.specx, self.specy].subgridspec(
+                1, 2, width_ratios=widths, wspace=0.2
+            )
             ax2m = self.fig.add_subplot(ax[0, :])
             ax2a = self.fig.add_subplot(ax[0, 0], sharey=ax2m)
             ax2b = self.fig.add_subplot(ax[0, 1], sharey=ax2a)
@@ -487,36 +701,78 @@ class BrokenAxes(PlotTemplate):
             ax2b.set_ylim(ylo, yhi)
             ax2m.set_ylim(ylo, yhi)
 
-            norm1 = (widths[0]/sum(widths))
-            norm2 = (widths[1]/sum(widths))
+            norm1 = widths[0] / sum(widths)
+            norm2 = widths[1] / sum(widths)
 
-            ax2m.tick_params(which='major', length=3, width=1, direction='in', 
-                             bottom=False, top=False, right=False, left=False, 
-                             labelbottom=False, labelleft=False, 
-                             color=pc.darkgrey,zorder=1000)
+            ax2m.tick_params(
+                which="major",
+                length=3,
+                width=1,
+                direction="in",
+                bottom=False,
+                top=False,
+                right=False,
+                left=False,
+                labelbottom=False,
+                labelleft=False,
+                color=pc.darkgrey,
+                zorder=1000,
+            )
 
-            ax2a.tick_params(which='major', length=3, width=1, direction='in', 
-                             bottom=True, top=False, right=False, color=pc.darkgrey)
-            ax2b.tick_params(which='major', length=3, width=1, direction='in', 
-                             bottom=True, top=False, right=False, left=False, 
-                             labelleft=False, color=pc.darkgrey)    
+            ax2a.tick_params(
+                which="major",
+                length=3,
+                width=1,
+                direction="in",
+                bottom=True,
+                top=False,
+                right=False,
+                color=pc.darkgrey,
+            )
+            ax2b.tick_params(
+                which="major",
+                length=3,
+                width=1,
+                direction="in",
+                bottom=True,
+                top=False,
+                right=False,
+                left=False,
+                labelleft=False,
+                color=pc.darkgrey,
+            )
 
-            ax2m.spines['right'].set_visible(False)
-            ax2m.spines['left'].set_visible(False)
-            ax2m.spines['top'].set_visible(False)
-            ax2m.spines['bottom'].set_visible(False)
-            ax2a.spines['right'].set_visible(False)
-            ax2b.spines['left'].set_visible(False)
+            ax2m.spines["right"].set_visible(False)
+            ax2m.spines["left"].set_visible(False)
+            ax2m.spines["top"].set_visible(False)
+            ax2m.spines["bottom"].set_visible(False)
+            ax2a.spines["right"].set_visible(False)
+            ax2b.spines["left"].set_visible(False)
 
+            ax2a.plot(
+                [xhi1 - self.tilt * norm1, xhi1 + self.tilt * norm1],
+                [ylo - self.d / 2, ylo + self.d / 2],
+                color=pc.darkgrey,
+            )[0].set_clip_on(False)
+            ax2a.plot(
+                [xhi1 - self.tilt * norm1, xhi1 + self.tilt * norm1],
+                [yhi - self.d / 2, yhi + self.d / 2],
+                color=pc.darkgrey,
+            )[0].set_clip_on(False)
+            ax2b.plot(
+                [xlo2 - self.tilt * norm2, xlo2 + self.tilt * norm2],
+                [ylo - self.d / 2, ylo + self.d / 2],
+                color=pc.darkgrey,
+            )[0].set_clip_on(False)
+            ax2b.plot(
+                [xlo2 - self.tilt * norm2, xlo2 + self.tilt * norm2],
+                [yhi - self.d / 2, yhi + self.d / 2],
+                color=pc.darkgrey,
+            )[0].set_clip_on(False)
 
-            ax2a.plot([xhi1-self.tilt*norm1, xhi1+self.tilt*norm1], [ylo-self.d/2, ylo+self.d/2], color=pc.darkgrey)[0].set_clip_on(False)
-            ax2a.plot([xhi1-self.tilt*norm1, xhi1+self.tilt*norm1], [yhi-self.d/2, yhi+self.d/2], color=pc.darkgrey)[0].set_clip_on(False)
-            ax2b.plot([xlo2-self.tilt*norm2, xlo2+self.tilt*norm2], [ylo-self.d/2, ylo+self.d/2], color=pc.darkgrey)[0].set_clip_on(False)
-            ax2b.plot([xlo2-self.tilt*norm2, xlo2+self.tilt*norm2], [yhi-self.d/2, yhi+self.d/2], color=pc.darkgrey)[0].set_clip_on(False)
-
-        elif len(self.y)==4:
-            seg1 = self.y[1]-self.y[0]
-            seg2 = self.y[3]-self.y[2]
+        elif len(self.y) == 4:
+            seg1 = self.y[1] - self.y[0]
+            seg2 = self.y[3] - self.y[2]
             ylo1 = self.y[0]
             ylo2 = self.y[2]
             yhi1 = self.y[1]
@@ -524,7 +780,9 @@ class BrokenAxes(PlotTemplate):
             xlo = self.x[0]
             xhi = self.x[1]
             widths = [seg1, seg2]
-            ax = self.spec[self.specx, self.specy].subgridspec(2, 1, height_ratios=widths, wspace=0.2)
+            ax = self.spec[self.specx, self.specy].subgridspec(
+                2, 1, height_ratios=widths, wspace=0.2
+            )
             ax2m = self.fig.add_subplot(ax[:, 0])
             ax2a = self.fig.add_subplot(ax[1, 0], sharex=ax2m)
             ax2b = self.fig.add_subplot(ax[0, 0], sharex=ax2a)
@@ -534,37 +792,79 @@ class BrokenAxes(PlotTemplate):
             ax2b.set_xlim(xlo, xhi)
             ax2m.set_xlim(xlo, xhi)
 
-            norm1 = (widths[0]/sum(widths))
-            norm2 = (widths[1]/sum(widths))
+            norm1 = widths[0] / sum(widths)
+            norm2 = widths[1] / sum(widths)
 
-            ax2m.tick_params(which='major', length=3, width=1, direction='in', 
-                             bottom=False, top=False, right=False, left=False, 
-                             labelbottom=False, labelleft=False, 
-                             color=pc.darkgrey,zorder=1000)
+            ax2m.tick_params(
+                which="major",
+                length=3,
+                width=1,
+                direction="in",
+                bottom=False,
+                top=False,
+                right=False,
+                left=False,
+                labelbottom=False,
+                labelleft=False,
+                color=pc.darkgrey,
+                zorder=1000,
+            )
 
-            ax2a.tick_params(which='major', length=3, width=1, direction='in', 
-                             bottom=True, top=False, right=False, labeltop=False, color=pc.darkgrey)
-            ax2b.tick_params(which='major', length=3, width=1, direction='in', 
-                             bottom=False, top=True, right=False, left=True, 
-                             labelbottom=False, color=pc.darkgrey)    
+            ax2a.tick_params(
+                which="major",
+                length=3,
+                width=1,
+                direction="in",
+                bottom=True,
+                top=False,
+                right=False,
+                labeltop=False,
+                color=pc.darkgrey,
+            )
+            ax2b.tick_params(
+                which="major",
+                length=3,
+                width=1,
+                direction="in",
+                bottom=False,
+                top=True,
+                right=False,
+                left=True,
+                labelbottom=False,
+                color=pc.darkgrey,
+            )
 
-            ax2m.spines['right'].set_visible(False)
-            ax2m.spines['left'].set_visible(False)
-            ax2m.spines['top'].set_visible(False)
-            ax2m.spines['bottom'].set_visible(False)
-            ax2a.spines['top'].set_visible(False)
-            ax2b.spines['bottom'].set_visible(False)
+            ax2m.spines["right"].set_visible(False)
+            ax2m.spines["left"].set_visible(False)
+            ax2m.spines["top"].set_visible(False)
+            ax2m.spines["bottom"].set_visible(False)
+            ax2a.spines["top"].set_visible(False)
+            ax2b.spines["bottom"].set_visible(False)
 
+            ax2a.plot(
+                [xlo - self.d / 2, xlo + self.d / 2],
+                [yhi1 - self.tilt * norm1, yhi1 + self.tilt * norm1],
+                color=pc.darkgrey,
+            )[0].set_clip_on(False)
+            ax2a.plot(
+                [xhi - self.d / 2, xhi + self.d / 2],
+                [yhi1 - self.tilt * norm1, yhi1 + self.tilt * norm1],
+                color=pc.darkgrey,
+            )[0].set_clip_on(False)
+            ax2b.plot(
+                [xlo - self.d / 2, xlo + self.d / 2],
+                [ylo2 - self.tilt * norm2, ylo2 + self.tilt * norm2],
+                color=pc.darkgrey,
+            )[0].set_clip_on(False)
+            ax2b.plot(
+                [xhi - self.d / 2, xhi + self.d / 2],
+                [ylo2 - self.tilt * norm2, ylo2 + self.tilt * norm2],
+                color=pc.darkgrey,
+            )[0].set_clip_on(False)
 
-            ax2a.plot([xlo-self.d/2, xlo+self.d/2], [yhi1-self.tilt*norm1, yhi1+self.tilt*norm1],  color=pc.darkgrey)[0].set_clip_on(False)
-            ax2a.plot([xhi-self.d/2, xhi+self.d/2], [yhi1-self.tilt*norm1, yhi1+self.tilt*norm1], color=pc.darkgrey)[0].set_clip_on(False)
-            ax2b.plot([xlo-self.d/2, xlo+self.d/2], [ylo2-self.tilt*norm2, ylo2+self.tilt*norm2], color=pc.darkgrey)[0].set_clip_on(False)
-            ax2b.plot([xhi-self.d/2, xhi+self.d/2], [ylo2-self.tilt*norm2, ylo2+self.tilt*norm2], color=pc.darkgrey)[0].set_clip_on(False)
-
-        custom_cycler = (cycler(color=self.colors))
+        custom_cycler = cycler(color=self.colors)
         ax2m.set_prop_cycle(custom_cycler)
         ax2a.set_prop_cycle(custom_cycler)
         ax2b.set_prop_cycle(custom_cycler)
 
         self.axes = [ax2m, ax2a, ax2b]
-

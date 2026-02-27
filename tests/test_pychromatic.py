@@ -368,3 +368,56 @@ class TestChromatifyDecorator:
         assert ax is not None
         import matplotlib.pyplot as plt
         plt.close("all")
+
+
+# ---------------------------------------------------------------------------
+# Multiplot tests
+# ---------------------------------------------------------------------------
+
+class TestMultiplot:
+    def test_basic_construction(self):
+        import matplotlib.pyplot as plt
+        from pychromatic import Multiplot
+        m = Multiplot(columns=2, rows=2)
+        assert m.axes.shape == (2, 2)
+        plt.close("all")
+
+    def test_gridspec_kwargs(self):
+        """Issue #4: arbitrary gridspec kwargs are forwarded."""
+        import matplotlib.pyplot as plt
+        from pychromatic import Multiplot
+        m = Multiplot(
+            columns=2, rows=1,
+            gridspec_kwargs={"left": 0.1, "right": 0.9, "bottom": 0.15},
+        )
+        assert m.axes.shape == (1, 2)
+        plt.close("all")
+
+    def test_style_axes(self):
+        """Issue #1: convenience axis/tick styling."""
+        import matplotlib.pyplot as plt
+        from pychromatic import Multiplot
+        m = Multiplot(columns=1, rows=1)
+        m.style_axes(
+            (0, 0),
+            xlabel="X", ylabel="Y", title="Test",
+            xlim=(0, 10), ylim=(-1, 1),
+            hide_spines=["top", "right"],
+        )
+        ax = m.axes[0, 0]
+        assert ax.get_xlabel() == "X"
+        assert ax.get_ylabel() == "Y"
+        assert ax.get_title() == "Test"
+        assert ax.get_xlim() == (0, 10)
+        assert not ax.spines["top"].get_visible()
+        assert not ax.spines["right"].get_visible()
+        plt.close("all")
+
+    def test_add_inset(self):
+        """Issue #2: inset axes creation."""
+        import matplotlib.pyplot as plt
+        from pychromatic import Multiplot
+        m = Multiplot(columns=1, rows=1)
+        m.add_inset((0, 0), width="30%", height="30%")
+        assert len(m.subaxes[0][0]) == 1
+        plt.close("all")

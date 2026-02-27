@@ -1,6 +1,7 @@
 """
 Color utility functions for converting, mixing, and visualizing colors.
 """
+
 from __future__ import annotations
 
 import colorsys
@@ -67,10 +68,8 @@ def rgb_to_hls(rgbval: list[int]) -> list[float]:
     list[float]
         A list of hls values
     """
-    h, l, s = colorsys.rgb_to_hls(
-        rgbval[0] / 255.0, rgbval[1] / 255.0, rgbval[2] / 255.0
-    )
-    return [h, l, s]
+    hue, lit, sat = colorsys.rgb_to_hls(rgbval[0] / 255.0, rgbval[1] / 255.0, rgbval[2] / 255.0)
+    return [hue, lit, sat]
 
 
 def hls_to_rgb(hls: list[float]) -> list[int]:
@@ -289,4 +288,3 @@ class Color_utils:
         if func is not None and callable(func):
             return func
         raise AttributeError(f"module 'pychromatic.cutils' has no attribute '{name}'")
-
