@@ -649,6 +649,7 @@ class BrokenAxes(PlotTemplate):
         self.columns = kwargs.get("columns", 1)
         self.rows = kwargs.get("rows", 1)
 
+        self.colors = list(pc.chromate["dark"].values())
         self.make_plot()
 
     def make_plot(self):

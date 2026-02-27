@@ -6,11 +6,11 @@ parts:
       - file: getting_started
   - caption: Examples
     chapters:
+      - file: examples/plotting
       - file: examples/colors
       - file: examples/palettes
       - file: examples/colormaps
       - file: examples/colorblind
-      - file: examples/plotting
       - file: examples/utilities
   - caption: Reference
     chapters:
