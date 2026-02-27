@@ -85,7 +85,7 @@ class Multiplot(PlotTemplate):
         self.wspace = kwargs.get("wspace")
         self.hspace = kwargs.get("hspace")
         self.gridspec_kwargs = kwargs.get("gridspec_kwargs", {})
-        self.colors = pc.chromate["dark"]
+        self.colors = list(pc.chromate["dark"].values())
         self.tables = []
         self.make_plot()
 
@@ -93,7 +93,6 @@ class Multiplot(PlotTemplate):
         """
         Access method
         """
-        # print(type(ax))
         if not isinstance(ax, tuple):
             raise IndexError("at least length two required")
 
@@ -146,7 +145,6 @@ class Multiplot(PlotTemplate):
             self.axes.append(np.array(axdummy))
             self.subaxes.append(saxdummy)
         self.axes = np.array(self.axes)
-        # self.subaxes = np.array(self.subaxes)
 
     def add_subplot(
         self,
@@ -279,11 +277,6 @@ class Multiplot(PlotTemplate):
             norm1 = widths[0] / sum(widths)
             norm2 = widths[1] / sum(widths)
 
-            # ax2m.tick_params(which='major', length=3, width=1, direction='in',
-            #                 bottom=False, top=False, right=False, left=False,
-            #                 labelbottom=False, labelleft=False,
-            #                 color=pc.accent["dgrey"],zorder=1000)
-
             ax2a.tick_params(
                 which="major",
                 length=3,
@@ -307,10 +300,6 @@ class Multiplot(PlotTemplate):
                 color=pc.accent["dgrey"],
             )
 
-            # ax2m.spines['right'].set_visible(False)
-            # ax2m.spines['left'].set_visible(False)
-            # ax2m.spines['top'].set_visible(False)
-            # ax2m.spines['bottom'].set_visible(False)
             ax2a.spines["right"].set_visible(False)
             ax2b.spines["left"].set_visible(False)
             ax2a.set_xticklabels([])
@@ -356,7 +345,7 @@ class Multiplot(PlotTemplate):
                 subplot_spec=self.spec[index[0], index[1]],
                 hspace=hspace,
                 wspace=wspace,
-                width_ratios=widths,
+                height_ratios=widths,
             )
 
             ax2a = self.fig.add_subplot(gs[0, 0])
@@ -366,15 +355,9 @@ class Multiplot(PlotTemplate):
             ax2b.set_ylim(ylo2, yhi2)
             ax2a.set_xlim(xlo, xhi)
             ax2b.set_xlim(xlo, xhi)
-            # ax2m.set_xlim(xlo, xhi)
 
             norm1 = widths[0] / sum(widths)
             norm2 = widths[1] / sum(widths)
-
-            # ax2m.tick_params(which='major', length=3, width=1, direction='in',
-            #                 bottom=False, top=False, right=False, left=False,
-            #                 labelbottom=False, labelleft=False,
-            #                 color=pc.accent["dgrey"],zorder=1000)
 
             ax2a.tick_params(
                 which="major",
@@ -400,10 +383,6 @@ class Multiplot(PlotTemplate):
                 color=pc.accent["dgrey"],
             )
 
-            # ax2m.spines['right'].set_visible(False)
-            # ax2m.spines['left'].set_visible(False)
-            # ax2m.spines['top'].set_visible(False)
-            # ax2m.spines['bottom'].set_visible(False)
             ax2a.spines["top"].set_visible(False)
             ax2b.spines["bottom"].set_visible(False)
             ax2a.set_xticklabels([])
@@ -433,11 +412,9 @@ class Multiplot(PlotTemplate):
             )[0].set_clip_on(False)
 
         custom_cycler = cycler(color=self.colors)
-        # ax2m.set_prop_cycle(custom_cycler)
         ax2a.set_prop_cycle(custom_cycler)
         ax2b.set_prop_cycle(custom_cycler)
 
-        # self.subaxes[index[0]][index[1]].append(ax2m)
         self.subaxes[index[0]][index[1]].append(ax2a)
         self.subaxes[index[0]][index[1]].append(ax2b)
 
@@ -455,7 +432,11 @@ class Multiplot(PlotTemplate):
             raise ValueError("index should be less than set columns")
 
         ax = inset_axes(
-            self.axes[index[0], index[1]], width=width, height=height, loc=loc, borderpad=borderpad
+            self.axes[index[0], index[1]],
+            width=width,
+            height=height,
+            loc=loc,
+            borderpad=borderpad,
         )
 
         custom_cycler = cycler(color=self.colors)

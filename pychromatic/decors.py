@@ -4,6 +4,7 @@ Decorators for auto-styling matplotlib plots.
 
 from __future__ import annotations
 
+import functools
 from collections.abc import Callable
 from typing import Any
 
@@ -19,6 +20,7 @@ def chromatify(add_subplot: Callable) -> Callable:
     The decorated function should return a matplotlib Axes object.
     """
 
+    @functools.wraps(add_subplot)
     def modify_plot(*args: Any, **kwargs: Any) -> Any:
         """Apply chromatify styling to the subplot."""
         # Process def args

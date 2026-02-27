@@ -113,8 +113,11 @@ def brighten(color: str, fraction: float = 0.05) -> str:
     rgbval = hex_to_rgb(color)
     hls = rgb_to_hls(rgbval)
 
-    # adjust luminance
-    hls[1] = min((1 + fraction) * hls[1], 1)
+    # adjust luminance (handle zero-luminance / pure-black case)
+    if hls[1] == 0 and fraction > 0:
+        hls[1] = min(fraction, 1.0)
+    else:
+        hls[1] = min((1 + fraction) * hls[1], 1)
 
     rgb = colorsys.hls_to_rgb(hls[0], hls[1], hls[2])
     return rgb_to_hex(rgb)
@@ -210,6 +213,64 @@ def create_colormap(colors: list[str]) -> mc.LinearSegmentedColormap:
         raise ValueError("length of colors should be at least 2")
 
     return mc.LinearSegmentedColormap.from_list("", colors)
+
+
+def get_color(value: float, cmap_name: str = "viridis") -> str:
+    """
+    Sample a color from a matplotlib colormap at a given position.
+
+    Parameters
+    ----------
+    value : float
+        Position to sample, must be between 0 and 1.
+    cmap_name : str, optional
+        Name of any matplotlib colormap (default ``'viridis'``).
+
+    Returns
+    -------
+    str
+        Hex color code at the requested position.
+
+    Examples
+    --------
+    >>> get_color(0.5, "viridis")
+    '#21918c'
+    """
+    if not 0 <= value <= 1:
+        raise ValueError(f"value must be between 0 and 1, got {value}")
+    cmap = plt.get_cmap(cmap_name)
+    rgba = cmap(value)
+    return rgb_to_hex([rgba[0], rgba[1], rgba[2]])
+
+
+def palette_cmap(palette_name: str) -> mc.LinearSegmentedColormap:
+    """
+    Create a matplotlib colormap from a pychromatic palette.
+
+    Parameters
+    ----------
+    palette_name : str
+        Name of a palette defined in ``pychromatic.colors.color_palettes``.
+
+    Returns
+    -------
+    LinearSegmentedColormap
+        A colormap interpolating through all colors in the palette.
+
+    Examples
+    --------
+    >>> cmap = palette_cmap("rainbow")
+    >>> cmap(0.0)  # first color in RGBA
+    (...)
+    """
+    from pychromatic.colors import color_palettes
+
+    if palette_name not in color_palettes:
+        raise KeyError(
+            f"Palette '{palette_name}' not found. Available: {', '.join(sorted(color_palettes))}"
+        )
+    hex_colors = color_palettes[palette_name]["colors"]
+    return mc.LinearSegmentedColormap.from_list(palette_name, hex_colors)
 
 
 def plot_colors(

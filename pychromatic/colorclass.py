@@ -4,9 +4,14 @@ Color class for representing and manipulating individual colors.
 
 from __future__ import annotations
 
+import re
+from collections.abc import Iterator
+
 from rich.console import Console
 
 import pychromatic.cutils as cutils
+
+_HEX_RE = re.compile(r"^#[0-9a-fA-F]{6}$")
 
 
 class Color:
@@ -22,6 +27,8 @@ class Color:
     """
 
     def __init__(self, colorstr: str, name: str | None = None) -> None:
+        if not _HEX_RE.match(colorstr):
+            raise ValueError(f"Invalid hex color '{colorstr}'. Expected format: '#rrggbb'")
         self.colorstr: str = colorstr
         self.original: str = colorstr
         self.originalname: str | None = name
@@ -32,6 +39,18 @@ class Color:
     def __repr__(self) -> str:
         name_part = f", name='{self.name}'" if self.name is not None else ""
         return f"Color('{self.colorstr}'{name_part})"
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Color):
+            return NotImplemented
+        return self.hex.lower() == other.hex.lower()
+
+    def __hash__(self) -> int:
+        return hash(self.hex.lower())
+
+    def __iter__(self) -> Iterator[int]:
+        """Iterate over (r, g, b) values so ``r, g, b = color`` works."""
+        return iter(self.rgb)
 
     def display(self) -> None:
         """Display the color with rich formatting in the terminal."""

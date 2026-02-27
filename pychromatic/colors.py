@@ -56,8 +56,7 @@ color_palettes = {
             "lime",
             "cyan",
         ],
-        "type": "sequential",
-        "other_stuff": "value",
+        "type": "qualitative",
     },
     "pastels": {
         "colors": [
@@ -88,7 +87,7 @@ color_palettes = {
             "color11",
             "color12",
         ],
-        "type": "",
+        "type": "qualitative",
     },
     "basics": {
         "colors": [
@@ -113,7 +112,7 @@ color_palettes = {
             "color8",
             "color9",
         ],
-        "type": "",
+        "type": "qualitative",
     },
     "set1_dark": {
         "colors": [
@@ -126,8 +125,17 @@ color_palettes = {
             "#a6761d",
             "#666666",
         ],
-        "names": ["color1", "color2", "color3", "color4", "color5", "color6", "color7", "color8"],
-        "type": "",
+        "names": [
+            "color1",
+            "color2",
+            "color3",
+            "color4",
+            "color5",
+            "color6",
+            "color7",
+            "color8",
+        ],
+        "type": "qualitative",
     },
     "set1_pastel": {
         "colors": [
@@ -140,63 +148,80 @@ color_palettes = {
             "#e5c494",
             "#b3b3b3",
         ],
-        "names": ["color1", "color2", "color3", "color4", "color5", "color6", "color7", "color8"],
-        "type": "",
+        "names": [
+            "color1",
+            "color2",
+            "color3",
+            "color4",
+            "color5",
+            "color6",
+            "color7",
+            "color8",
+        ],
+        "type": "qualitative",
     },
     "excel": {
-        "colors": ["#5F7CBB", "#B1534F", "#9DBD5B", "#7D60A0", "#E8994B", "#999999", "#67A8C4"],
+        "colors": [
+            "#5F7CBB",
+            "#B1534F",
+            "#9DBD5B",
+            "#7D60A0",
+            "#E8994B",
+            "#999999",
+            "#67A8C4",
+        ],
         "names": ["color1", "color2", "color3", "color4", "color5", "color6", "color7"],
-        "type": "",
+        "type": "qualitative",
     },
     "set2": {
         "colors": ["#d11141", "#00b159", "#00aedb", "#f37735", "#ffc425"],
         "names": ["color1", "color2", "color3", "color4", "color5"],
-        "type": "",
+        "type": "qualitative",
     },
     "google": {
         "colors": ["#008744", "#0057e7", "#d62d20", "#ffa700", "#B9B9B9"],
         "names": ["color1", "color2", "color3", "color4", "color5"],
-        "type": "",
+        "type": "qualitative",
     },
     "set3": {
         "colors": ["#5fad56", "#f2c14e", "#f78154", "#4d9078", "#b4436c"],
         "names": ["color1", "color2", "color3", "color4", "color5"],
-        "type": "",
+        "type": "qualitative",
     },
     "set4": {
         "colors": ["#363537", "#0cce6b", "#dced31", "#ef2d56", "#ed7d3a"],
         "names": ["color1", "color2", "color3", "color4", "color5"],
-        "type": "",
+        "type": "qualitative",
     },
     "dark": {
         "colors": ["#007283", "#72013f", "#c76b0d", "#322569", "#124d25"],
         "names": ["color1", "color2", "color3", "color4", "color5"],
-        "type": "",
+        "type": "qualitative",
     },
     "earth": {
         "colors": ["#FDBF00", "#514939", "#BD5340", "#90A74F", "#D0B388"],
         "names": ["color1", "color2", "color3", "color4", "color5"],
-        "type": "",
+        "type": "qualitative",
     },
     "set5": {
         "colors": ["#F4AB33", "#EC7176", "#C068A8", "#5C63A2", "#1B4E6B"],
         "names": ["color1", "color2", "color3", "color4", "color5"],
-        "type": "",
+        "type": "sequential",
     },
     "rainbow": {
         "colors": ["#015486", "#00B5D0", "#6EC626", "#FFBE00", "#FD5D47"],
         "names": ["color1", "color2", "color3", "color4", "color5"],
-        "type": "",
+        "type": "sequential",
     },
     "set6": {
         "colors": ["#435772", "#2DA4A8", "#FD9C3C", "#FD6041", "#CF2257"],
         "names": ["color1", "color2", "color3", "color4", "color5"],
-        "type": "",
+        "type": "qualitative",
     },
     "set7": {
         "colors": ["#4597A3", "#D6765D", "#99CFAB", "#F0CB73", "#7B7E7E"],
         "names": ["color1", "color2", "color3", "color4", "color5"],
-        "type": "",
+        "type": "qualitative",
     },
     "accent": {
         "colors": [
@@ -233,7 +258,7 @@ color_palettes = {
             "pblue",
             "pgrey",
         ],
-        "type": "",
+        "type": "qualitative",
     },
     # ── Colorblind-friendly palettes ──────────────────────────────────
     "okabe_ito": {
@@ -247,7 +272,16 @@ color_palettes = {
             "#CC79A7",
             "#000000",
         ],
-        "names": ["orange", "sky", "green", "yellow", "blue", "vermilion", "purple", "black"],
+        "names": [
+            "orange",
+            "sky",
+            "green",
+            "yellow",
+            "blue",
+            "vermilion",
+            "purple",
+            "black",
+        ],
         "type": "qualitative",
     },
     "tableau10": {
@@ -278,7 +312,15 @@ color_palettes = {
         "type": "qualitative",
     },
     "tol_bright": {
-        "colors": ["#4477AA", "#EE6677", "#228833", "#CCBB44", "#66CCEE", "#AA3377", "#BBBBBB"],
+        "colors": [
+            "#4477AA",
+            "#EE6677",
+            "#228833",
+            "#CCBB44",
+            "#66CCEE",
+            "#AA3377",
+            "#BBBBBB",
+        ],
         "names": ["blue", "pink", "green", "yellow", "cyan", "purple", "grey"],
         "type": "qualitative",
     },
@@ -294,27 +336,19 @@ color_palettes = {
             "#882255",
             "#AA4499",
         ],
-        "names": ["indigo", "sky", "teal", "green", "olive", "sand", "rose", "wine", "violet"],
+        "names": [
+            "indigo",
+            "sky",
+            "teal",
+            "green",
+            "olive",
+            "sand",
+            "rose",
+            "wine",
+            "violet",
+        ],
         "type": "qualitative",
     },
-}
-
-deprecated = {
-    "lred": "#d7191c",
-    "lyellow": "#fdae61",
-    "lgreen": "#abdda4",
-    "lblue": "#2b83ba",
-    "lgrey": "#455A64",
-    "dred": "#C62828",
-    "dyellow": "#FFA000",
-    "dgreen": "#008F68",
-    "dblue": "#006899",
-    "dgrey": "#424242",
-    "pred": "#e58080",
-    "pyellow": "#ffc766",
-    "pgreen": "#85e085",
-    "pblue": "#66cfff",
-    "pgrey": "#b3b3b3",
 }
 
 accent = {

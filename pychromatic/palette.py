@@ -5,7 +5,9 @@ Main file containing the Palette class
 from __future__ import annotations
 
 import random
+from collections.abc import Iterator
 
+import matplotlib.colors as mc
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 import numpy as np
@@ -48,6 +50,25 @@ class Palette:
         """
         n_colors = len(self.colors) if self.colors else 0
         return f"Palette('{self._palette}', {n_colors} colors)"
+
+    def __len__(self) -> int:
+        """Return the number of colors in the palette."""
+        return len(self.colors) if self.colors else 0
+
+    def __iter__(self) -> Iterator[Color]:
+        """Iterate over the colors in the palette."""
+        return iter(self.colors) if self.colors else iter([])
+
+    def __getitem__(self, index: int | str) -> Color:
+        """Access a color by integer index or name."""
+        if isinstance(index, int):
+            return self.colors[index]
+        if isinstance(index, str):
+            for c in self.colors:
+                if c.name == index:
+                    return c
+            raise KeyError(f"No color named '{index}' in palette")
+        raise TypeError(f"Index must be int or str, got {type(index).__name__}")
 
     @property
     def palette(self) -> str:
@@ -92,7 +113,7 @@ class Palette:
     def remove_color(self, clr: str) -> None:
         delattr(self, clr)
         pos = [i for i, c in enumerate(self.colors) if c.name == clr]
-        for p in pos:
+        for p in reversed(pos):
             del self.colors[p]
 
     def brighten(self, clr: str, fraction: float = 0.05, name: str | None = None) -> None:
@@ -102,7 +123,6 @@ class Palette:
         c = Color(hexv, name=name)
         setattr(self, name, c)
         self.colors.append(c)
-        self.show(color_list=[getattr(self, clr), c])
 
     def darken(self, clr: str, fraction: float = 0.05, name: str | None = None) -> None:
         self.brighten(clr, fraction=-1 * fraction, name=name)
@@ -123,7 +143,8 @@ class Palette:
         self.colors.append(c)
         self.show(color_list=[color1, c, color2])
 
-    def get_cmap(self) -> object:
+    def get_cmap(self) -> mc.LinearSegmentedColormap:
+        """Create a ``LinearSegmentedColormap`` from the palette colors."""
         cmap = cutils.create_colormap([color.hex for color in self.colors])
         return cmap
 
@@ -141,7 +162,6 @@ class Palette:
         clrobjlist = [Color(hexv, name=names[count]) for count, hexv in enumerate(clrlist)]
         for c in clrobjlist:
             self.colors.append(c)
-        self.show(color_list=clrobjlist)
 
     def assign_palette(self, palette_name: str) -> None:
         """
@@ -228,7 +248,10 @@ class Palette:
             axs[1].axis("equal")
             axs[1].set_title(title)
             axs[2].bar(
-                np.arange(len(colors)), np.arange(len(colors)) + 1, color=colors, linewidth=0
+                np.arange(len(colors)),
+                np.arange(len(colors)) + 1,
+                color=colors,
+                linewidth=0,
             )
             axs[2].set_xticks(np.arange(len(colors)) + 0.4)
             plt.show()

@@ -12,11 +12,12 @@ A color palette manager and matplotlib plotting utility for Python.
 Features
 --------
 
-* **20 curated color palettes** including 4 colorblind-friendly sets
+* **22 curated color palettes** including 4 colorblind-friendly sets
   (Okabe–Ito, Tableau 10, Tol Bright, Tol Muted)
 * Color manipulation: brighten, darken, mix, find intermediates
 * Color format conversions: hex, RGB, HLS
-* Generate matplotlib colormaps from any color list
+* Sample any matplotlib colormap with ``get_color(0.5, 'viridis')``
+* Generate matplotlib colormaps from any palette with ``palette_cmap()``
 * Opinionated matplotlib plot templates (``Multiplot``, ``BrokenAxes``)
 * ``chromatify`` decorator for auto-styling matplotlib subplots
 * Rich terminal color preview via ``Color.display()``
@@ -49,6 +50,13 @@ Quick Start
     c = Color('#1976d2', name='blue')
     c.brighten(0.2)
     c.display()
+
+    # Sample a matplotlib colormap
+    from pychromatic import get_color, palette_cmap
+    hex_color = get_color(0.5, 'viridis')   # '#21918c'
+
+    # Build a cmap from any pychromatic palette
+    cmap = palette_cmap('rainbow')
 
 Colorblind-Friendly Palettes
 -----------------------------
@@ -86,7 +94,7 @@ Available Palettes
      - Type
    * - ``default``
      - 15
-     - sequential
+     - qualitative
    * - ``pastels``
      - 12
      - qualitative
@@ -116,7 +124,7 @@ Available Palettes
      - qualitative
    * - ``rainbow``
      - 5
-     - qualitative
+     - sequential
    * - ``accent``
      - 15
      - qualitative
