@@ -1,3 +1,4 @@
+:orphan:
 
 Palettes in pychromatic
 =======================

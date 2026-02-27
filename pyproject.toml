@@ -46,7 +46,7 @@ dev = [
 [project.urls]
 Homepage = "https://github.com/pyscal/pychromatic"
 Repository = "https://github.com/pyscal/pychromatic"
-Documentation = "https://pychromatic.readthedocs.io"
+Documentation = "https://pyscal.github.io/pychromatic/"
 "Bug Tracker" = "https://github.com/pyscal/pychromatic/issues"
 
 [tool.setuptools.packages.find]
