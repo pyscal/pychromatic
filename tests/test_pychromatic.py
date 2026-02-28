@@ -59,7 +59,9 @@ class TestRgbToHex:
 
 
 class TestRoundTripConversions:
-    @pytest.mark.parametrize("hexval", ["#ff5722", "#1976d2", "#388e3c", "#000000", "#ffffff"])
+    @pytest.mark.parametrize(
+        "hexval", ["#ff5722", "#1976d2", "#388e3c", "#000000", "#ffffff"]
+    )
     def test_hex_rgb_roundtrip(self, hexval):
         rgb = hex_to_rgb(hexval)
         assert rgb_to_hex(rgb) == hexval
@@ -107,11 +109,15 @@ class TestMixColors:
 
 class TestFindIntermediateColors:
     def test_returns_correct_count(self):
-        result = find_intermediate_colors("#ff0000", "#0000ff", colors=3, ignore_edges=True)
+        result = find_intermediate_colors(
+            "#ff0000", "#0000ff", colors=3, ignore_edges=True
+        )
         assert len(result) == 3
 
     def test_includes_edges(self):
-        result = find_intermediate_colors("#ff0000", "#0000ff", colors=3, ignore_edges=False)
+        result = find_intermediate_colors(
+            "#ff0000", "#0000ff", colors=3, ignore_edges=False
+        )
         assert len(result) == 5  # 3 intermediates + 2 edges
 
     def test_all_valid_hex(self):
@@ -287,8 +293,12 @@ class TestColorData:
     def test_all_colors_are_valid_hex(self, palette_name):
         palette = colors.color_palettes[palette_name]
         for c in palette["colors"]:
-            assert c.startswith("#"), f"Color '{c}' in palette '{palette_name}' is not hex"
-            assert len(c) == 7, f"Color '{c}' in palette '{palette_name}' is not 7-char hex"
+            assert c.startswith(
+                "#"
+            ), f"Color '{c}' in palette '{palette_name}' is not hex"
+            assert (
+                len(c) == 7
+            ), f"Color '{c}' in palette '{palette_name}' is not 7-char hex"
 
 
 # ---------------------------------------------------------------------------
@@ -299,11 +309,15 @@ class TestColorData:
 class TestColorblindPalettes:
     """Validate the four colorblind-friendly palettes."""
 
-    @pytest.mark.parametrize("palette_name", ["okabe_ito", "tableau10", "tol_bright", "tol_muted"])
+    @pytest.mark.parametrize(
+        "palette_name", ["okabe_ito", "tableau10", "tol_bright", "tol_muted"]
+    )
     def test_present_in_color_palettes(self, palette_name):
         assert palette_name in colors.color_palettes
 
-    @pytest.mark.parametrize("palette_name", ["okabe_ito", "tableau10", "tol_bright", "tol_muted"])
+    @pytest.mark.parametrize(
+        "palette_name", ["okabe_ito", "tableau10", "tol_bright", "tol_muted"]
+    )
     def test_qualitative_type(self, palette_name):
         assert colors.color_palettes[palette_name]["type"] == "qualitative"
 
@@ -352,7 +366,9 @@ class TestColorblindPalettes:
         for hexval in standalone.values():
             assert hexval in palette_entry["colors"]
 
-    @pytest.mark.parametrize("dict_name", ["okabe_ito", "tableau10", "tol_bright", "tol_muted"])
+    @pytest.mark.parametrize(
+        "dict_name", ["okabe_ito", "tableau10", "tol_bright", "tol_muted"]
+    )
     def test_all_valid_hex(self, dict_name):
         standalone = getattr(colors, dict_name)
         for name, hexval in standalone.items():
@@ -794,9 +810,9 @@ class TestPaletteTypes:
     def test_type_is_valid(self, palette_name):
         valid_types = {"qualitative", "sequential", "diverging"}
         palette = colors.color_palettes[palette_name]
-        assert palette["type"] in valid_types, (
-            f"Palette '{palette_name}' has invalid type '{palette['type']}'"
-        )
+        assert (
+            palette["type"] in valid_types
+        ), f"Palette '{palette_name}' has invalid type '{palette['type']}'"
 
 
 # ---------------------------------------------------------------------------
@@ -830,3 +846,124 @@ class TestImports:
         from pychromatic import palette_cmap
 
         assert callable(palette_cmap)
+
+
+# ---------------------------------------------------------------------------
+# Palette lighter / darker tests
+# ---------------------------------------------------------------------------
+
+
+class TestPaletteLighterDarker:
+    """Tests for Palette.lighter() and Palette.darker() derivative palettes."""
+
+    def test_lighter_returns_new_palette(self):
+        p = Palette("default")
+        p_light = p.lighter()
+        assert isinstance(p_light, Palette)
+        assert p_light is not p
+
+    def test_lighter_preserves_length(self):
+        p = Palette("default")
+        p_light = p.lighter(0.5)
+        assert len(p_light) == len(p)
+
+    def test_lighter_preserves_names(self):
+        p = Palette("default")
+        p_light = p.lighter(0.4)
+        original_names = [c.name for c in p]
+        lighter_names = [c.name for c in p_light]
+        assert original_names == lighter_names
+
+    def test_lighter_colors_are_brighter(self):
+        """Lighter palette should have higher luminance for each color."""
+        p = Palette("default")
+        p_light = p.lighter(0.5)
+        for orig, light in zip(p, p_light):
+            orig_hls = rgb_to_hls(hex_to_rgb(orig.hex))
+            light_hls = rgb_to_hls(hex_to_rgb(light.hex))
+            assert light_hls[1] >= orig_hls[1]
+
+    def test_lighter_does_not_mutate_original(self):
+        p = Palette("default")
+        original_hexes = [c.hex for c in p]
+        _ = p.lighter(0.6)
+        assert [c.hex for c in p] == original_hexes
+
+    def test_lighter_palette_name(self):
+        p = Palette("default")
+        p_light = p.lighter()
+        assert p_light._palette == "default_lighter"
+
+    def test_lighter_colors_accessible_by_name(self):
+        p = Palette("default")
+        p_light = p.lighter(0.3)
+        for c in p:
+            assert hasattr(p_light, c.name)
+            assert getattr(p_light, c.name).hex != c.hex or c.hex == "#ffffff"
+
+    def test_darker_returns_new_palette(self):
+        p = Palette("default")
+        p_dark = p.darker()
+        assert isinstance(p_dark, Palette)
+        assert p_dark is not p
+
+    def test_darker_preserves_length(self):
+        p = Palette("default")
+        p_dark = p.darker(0.3)
+        assert len(p_dark) == len(p)
+
+    def test_darker_colors_are_darker(self):
+        """Darker palette should have lower luminance for each color."""
+        p = Palette("default")
+        p_dark = p.darker(0.3)
+        for orig, dark in zip(p, p_dark):
+            orig_hls = rgb_to_hls(hex_to_rgb(orig.hex))
+            dark_hls = rgb_to_hls(hex_to_rgb(dark.hex))
+            assert dark_hls[1] <= orig_hls[1]
+
+    def test_darker_does_not_mutate_original(self):
+        p = Palette("default")
+        original_hexes = [c.hex for c in p]
+        _ = p.darker(0.3)
+        assert [c.hex for c in p] == original_hexes
+
+    def test_lighter_different_fractions(self):
+        p = Palette("default")
+        p1 = p.lighter(0.2)
+        p2 = p.lighter(0.8)
+        # Higher fraction should give brighter colors
+        for c1, c2 in zip(p1, p2):
+            hls1 = rgb_to_hls(hex_to_rgb(c1.hex))
+            hls2 = rgb_to_hls(hex_to_rgb(c2.hex))
+            assert hls2[1] >= hls1[1]
+
+    def test_lighter_iterable(self):
+        """Lighter palette should be iterable and zip-able with original."""
+        p = Palette("default")
+        p_light = p.lighter(0.5)
+        pairs = list(zip(p, p_light))
+        assert len(pairs) == len(p)
+
+    def test_lighter_with_different_palettes(self):
+        for name in ("pastels", "dark", "earth"):
+            p = Palette(name)
+            p_light = p.lighter(0.4)
+            assert len(p_light) == len(p)
+            assert p_light._palette == f"{name}_lighter"
+
+    def test_darker_palette_name(self):
+        p = Palette("earth")
+        p_dark = p.darker(0.3)
+        assert p_dark._palette == "earth_lighter"  # internally uses lighter(-frac)
+
+    def test_chained_lighter(self):
+        """Should be able to chain: p.lighter().lighter()."""
+        p = Palette("default")
+        p_ll = p.lighter(0.3).lighter(0.3)
+        assert len(p_ll) == len(p)
+        # Double-lightened should be brighter than single
+        p_l = p.lighter(0.3)
+        for single, double in zip(p_l, p_ll):
+            hls_s = rgb_to_hls(hex_to_rgb(single.hex))
+            hls_d = rgb_to_hls(hex_to_rgb(double.hex))
+            assert hls_d[1] >= hls_s[1]

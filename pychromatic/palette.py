@@ -96,7 +96,9 @@ class Palette:
         for c in self.colors:
             c.reset()
 
-    def add_color(self, clr: str | Color, name: str | None = None, pos: int | None = None) -> None:
+    def add_color(
+        self, clr: str | Color, name: str | None = None, pos: int | None = None
+    ) -> None:
         if pos is None:
             pos = len(self.colors) + 1
 
@@ -116,7 +118,9 @@ class Palette:
         for p in reversed(pos):
             del self.colors[p]
 
-    def brighten(self, clr: str, fraction: float = 0.05, name: str | None = None) -> None:
+    def brighten(
+        self, clr: str, fraction: float = 0.05, name: str | None = None
+    ) -> None:
         if name is None:
             name = f"color{len(self.colors)}"
         hexv = cutils.brighten(getattr(self, clr).hex, fraction=fraction)
@@ -127,7 +131,51 @@ class Palette:
     def darken(self, clr: str, fraction: float = 0.05, name: str | None = None) -> None:
         self.brighten(clr, fraction=-1 * fraction, name=name)
 
-    def mix(self, clr1: str, clr2: str, ratio: float = 0.5, name: str | None = None) -> None:
+    def lighter(self, fraction: float = 0.5) -> Palette:
+        """Return a new palette with all colors brightened (paler/pastel).
+
+        Parameters
+        ----------
+        fraction : float
+            How much to brighten each color.  Values around 0.3–0.7 give
+            pleasant pastel variants suitable for shaded error regions.
+
+        Returns
+        -------
+        Palette
+            A new ``Palette`` whose colors are lighter versions of the
+            originals, preserving names and order.
+        """
+        new_palette = Palette.__new__(Palette)
+        new_palette._palette = f"{self._palette}_lighter"
+        new_colors: list[Color] = []
+        for c in self.colors:
+            new_hex = cutils.brighten(c.hex, fraction=fraction)
+            new_c = Color(new_hex, name=c.name)
+            setattr(new_palette, c.name, new_c)
+            new_colors.append(new_c)
+        new_palette.colors = new_colors
+        return new_palette
+
+    def darker(self, fraction: float = 0.3) -> Palette:
+        """Return a new palette with all colors darkened.
+
+        Parameters
+        ----------
+        fraction : float
+            How much to darken each color.
+
+        Returns
+        -------
+        Palette
+            A new ``Palette`` whose colors are darker versions of the
+            originals, preserving names and order.
+        """
+        return self.lighter(fraction=-fraction)
+
+    def mix(
+        self, clr1: str, clr2: str, ratio: float = 0.5, name: str | None = None
+    ) -> None:
         if name is None:
             name = f"color{len(self.colors)}"
 
@@ -159,7 +207,9 @@ class Palette:
         clrlist = cutils.find_intermediate_colors(
             color1.hex, color2.hex, colors=num_colors, ignore_edges=True
         )
-        clrobjlist = [Color(hexv, name=names[count]) for count, hexv in enumerate(clrlist)]
+        clrobjlist = [
+            Color(hexv, name=names[count]) for count, hexv in enumerate(clrlist)
+        ]
         for c in clrobjlist:
             self.colors.append(c)
 
@@ -238,7 +288,9 @@ class Palette:
             for count, color in enumerate(colors):
                 x = np.arange(11)
                 y = np.sin(x / (1.75 * np.pi))
-                axs[0].plot(x, y + count / 3.0, color=color, label=f"{color}", linewidth=4)
+                axs[0].plot(
+                    x, y + count / 3.0, color=color, label=f"{color}", linewidth=4
+                )
             axs[1].pie(
                 (np.random.dirichlet(np.ones(len(colors)), size=1) * 100)[0],
                 colors=colors,
