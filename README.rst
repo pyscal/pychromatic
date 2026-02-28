@@ -6,7 +6,7 @@ A color palette manager and matplotlib plotting utility for Python.
 
 
 * Free software: GNU General Public License v3
-* Documentation: https://pychromatic.readthedocs.io.
+* Documentation: https://pyscal.github.io/pychromatic/
 
 
 Features
