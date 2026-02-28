@@ -1,4 +1,4 @@
-__version__ = "0.6.0"
+__version__ = "0.6.1"
 
 from pychromatic.colorclass import Color
 from pychromatic.colors import okabe_ito, tableau10, tol_bright, tol_muted

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pychromatic"
-version = "0.6.0"
+version = "0.6.1"
 description = "A pretty color palette manager and matplotlib plotting utility for Python"
 readme = "README.rst"
 license = {text = "GPL-3.0-only"}
@@ -80,7 +80,7 @@ ignore = [
 known-first-party = ["pychromatic"]
 
 [tool.bumpversion]
-current_version = "0.6.0"
+current_version = "0.6.1"
 commit = true
 tag = true
 
