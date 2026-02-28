@@ -40,7 +40,7 @@ dev = [
     "ruff>=0.4",
     "sphinx>=7",
     "sphinx-rtd-theme",
-    "bump2version",
+    "bump-my-version",
 ]
 
 [project.urls]
